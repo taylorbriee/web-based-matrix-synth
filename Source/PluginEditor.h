@@ -52,7 +52,8 @@ private:
     juce::Rectangle<int> smallerBox;
     
     
-    std::vector<std::string> selectedModules;
+    juce::String selectedModules[4] = {"", "", "", ""};
+
 
     juce::Rectangle<int> window;
     

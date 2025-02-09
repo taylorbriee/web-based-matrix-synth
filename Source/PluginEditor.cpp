@@ -29,6 +29,7 @@ WebMatrixSynthAudioProcessorEditor::WebMatrixSynthAudioProcessorEditor (WebMatri
         addAndMakeVisible(*dial);
     }
     
+    
     for (auto* box : boxes)  // Assuming `dials` is an array or vector of sliders
     {
 
@@ -50,17 +51,32 @@ WebMatrixSynthAudioProcessorEditor::WebMatrixSynthAudioProcessorEditor (WebMatri
         box->addItem("4", 8);
 
         box->setSelectedId(1, juce::dontSendNotification);
-        
-        box->onChange = [this] {  };
-
-        
+     
         
         addAndMakeVisible(box);
 
- 
-        
-
     }
+    
+    box1.onChange = [this]() {
+        selectedModules[0] = box1.getText();
+        DBG("Box1 selected text: " + box1.getText());
+    };
+    
+    box2.onChange = [this]() {
+        selectedModules[1] = box2.getText();
+        DBG("Box2 selected text: " + box2.getText());
+    };
+    
+    box3.onChange = [this]() {
+        selectedModules[2] = box3.getText();
+        DBG("Box3 selected text: " + box3.getText());
+
+    };
+    
+    box4.onChange = [this]() {
+        selectedModules[3] = box4.getText();
+        DBG("Box4 selected text: " + box4.getText());
+    };
 }
 
 WebMatrixSynthAudioProcessorEditor::~WebMatrixSynthAudioProcessorEditor()
