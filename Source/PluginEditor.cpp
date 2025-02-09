@@ -28,13 +28,29 @@ WebMatrixSynthAudioProcessorEditor::WebMatrixSynthAudioProcessorEditor (WebMatri
     
     for (auto* box : boxes)  // Assuming `dials` is an array or vector of sliders
     {
-        box->addSectionHeading("Generator Modules");
-        box->addItemList({"Oscillator", "LFO", "VCO"}, 1);
+
         
+        
+        box->addItem("None", 1);
+
+        box->addSectionHeading("Generator Modules");
+
+        box->addItem("Oscillator", 2);
+        box->addItem("LFO", 3);
+        box->addItem("VCO", 4);
+
         box->addSectionHeading("Outputs");
-        box->addItemList({"1", "2", "3", "4"}, 1);
+
+        box->addItem("1", 5);
+        box->addItem("2", 6);
+        box->addItem("3", 7);
+        box->addItem("4", 8);
+
+        box->setSelectedId(1, juce::dontSendNotification);
         
         addAndMakeVisible(box);
+
+ 
         
 
     }

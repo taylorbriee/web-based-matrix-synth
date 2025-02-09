@@ -18,6 +18,7 @@ bool SynthVoice::canPlaySound (juce::SynthesiserSound* sound)
 
 void SynthVoice::startNote (int midiNoteNumber, float velocity, juce::SynthesiserSound *sound, int currentPitchWheelPosition)
 {
+    
 
     
 }
@@ -46,8 +47,7 @@ void SynthVoice::prepareToPlay (double sampleRate, int samplesPerBlock, int outp
     spec.maximumBlockSize = samplesPerBlock;
     spec.sampleRate = sampleRate;
     spec.numChannels = outputChannels;
-    
-    osc.prepare (spec);
+      
     gain.prepare (spec);
     
     osc.setFrequency (220.0f);
@@ -61,8 +61,11 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int 
     
     jassert(isPrepared);
     
-//    juce::dsp::AudioBlock<float> audioBlock { outputBuffer };
-//    osc.process (juce::dsp::ProcessContextReplacing<float> (audioBlock));
-//    gain.process (juce::dsp::ProcessContextReplacing<float> (audioBlock));
+    juce::dsp::AudioBlock<float> audioBlock { outputBuffer };
+    
+    //line below is causing apple audio thread issues
+    //osc.process (juce::dsp::ProcessContextReplacing<float> (audioBlock));
+    gain.process (juce::dsp::ProcessContextReplacing<float> (audioBlock));
+    adsr.applyEnvelopeToBuffer(outputBuffer, startSample,  numSamples);
     
 }
