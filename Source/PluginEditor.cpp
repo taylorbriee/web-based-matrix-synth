@@ -18,6 +18,9 @@ WebMatrixSynthAudioProcessorEditor::WebMatrixSynthAudioProcessorEditor (WebMatri
     setSize (600, 400);
     dial1.setSliderStyle(juce::Slider::Rotary);
     
+    myButton.setButtonText("OSC");  // Set text of the button
+    addAndMakeVisible(myButton);  // Make the button visible in the UI
+    
     for (auto* dial : dials)  // Assuming `dials` is an array or vector of sliders
     {
         dial->setSliderStyle(juce::Slider::Rotary);
@@ -35,7 +38,7 @@ WebMatrixSynthAudioProcessorEditor::WebMatrixSynthAudioProcessorEditor (WebMatri
 
         box->addSectionHeading("Generator Modules");
 
-        box->addItem("Oscillator", 2);
+        box->addItem("OSC", 2);
         box->addItem("LFO", 3);
         box->addItem("VCO", 4);
 
@@ -47,6 +50,10 @@ WebMatrixSynthAudioProcessorEditor::WebMatrixSynthAudioProcessorEditor (WebMatri
         box->addItem("4", 8);
 
         box->setSelectedId(1, juce::dontSendNotification);
+        
+        box->onChange = [this] {  };
+
+        
         
         addAndMakeVisible(box);
 
@@ -67,9 +74,7 @@ void WebMatrixSynthAudioProcessorEditor::paint (juce::Graphics& g)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
     
     
-    
     // Draw a smaller rectangle inside the drawable area
-    juce::Rectangle<int> smallerBox = window.reduced(10); // Smaller margins
     g.setColour(juce::Colours::grey);
     g.fillRect(smallerBox);
 }
@@ -82,7 +87,14 @@ void WebMatrixSynthAudioProcessorEditor::resized()
     jassert (true);
     dial1.setBounds(getLocalBounds());
     
+
+
+    
     juce::Grid grid;
+    
+    
+    
+
     
     // Define a 4x4 grid (4 columns, 4 rows)
     grid.templateColumns = {
@@ -119,6 +131,22 @@ void WebMatrixSynthAudioProcessorEditor::resized()
     
     grid.performLayout(gridArea);
 
-    // Layout the grid within the component's bounds
+    
+    smallerBox = window.reduced(10); // Smaller margins
+
+    
+    int padding = 5;
+
+    
+    
+    int buttonWidth = smallerBox.getWidth()/10;
+    int buttonHeight = smallerBox.reduced(padding).getHeight();
+    int buttonX = smallerBox.reduced(padding).getX();
+    int buttonY = smallerBox.reduced(padding).getY();
+
+    myButton.setBounds(buttonX, buttonY, buttonWidth, buttonHeight);
+    
+
+    repaint();
 
 }

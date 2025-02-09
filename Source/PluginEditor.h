@@ -45,8 +45,14 @@ private:
     juce::ComboBox* boxes[4] = {
         &box1, &box2, &box3, &box4
     };
+    
 
+    juce::TextButton myButton;
     juce::Rectangle<int> topArea1;
+    juce::Rectangle<int> smallerBox;
+    
+    
+    std::vector<std::string> selectedModules;
 
     juce::Rectangle<int> window;
     
