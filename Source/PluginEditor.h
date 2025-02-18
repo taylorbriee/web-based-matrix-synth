@@ -23,6 +23,8 @@ public:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
+    
+    void updateButtons();
 
 private:
     // This reference is provided as a quick way for your editor to
@@ -53,6 +55,11 @@ private:
     
     
     juce::String selectedModules[4] = {"", "", "", ""};
+    
+    
+    std::vector<juce::TextButton*> moduleButtons{nullptr, nullptr, nullptr, nullptr};
+
+
 
 
     juce::Rectangle<int> window;

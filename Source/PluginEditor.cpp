@@ -21,6 +21,7 @@ WebMatrixSynthAudioProcessorEditor::WebMatrixSynthAudioProcessorEditor (WebMatri
     myButton.setButtonText("OSC");  // Set text of the button
     addAndMakeVisible(myButton);  // Make the button visible in the UI
     
+    
     for (auto* dial : dials)  // Assuming `dials` is an array or vector of sliders
     {
         dial->setSliderStyle(juce::Slider::Rotary);
@@ -32,8 +33,6 @@ WebMatrixSynthAudioProcessorEditor::WebMatrixSynthAudioProcessorEditor (WebMatri
     
     for (auto* box : boxes)  // Assuming `dials` is an array or vector of sliders
     {
-
-        
         
         box->addItem("None", 1);
 
@@ -59,24 +58,190 @@ WebMatrixSynthAudioProcessorEditor::WebMatrixSynthAudioProcessorEditor (WebMatri
     
     box1.onChange = [this]() {
         selectedModules[0] = box1.getText();
+        updateButtons();
+        
         DBG("Box1 selected text: " + box1.getText());
+        for (int i = 0; i < 4; i++) {
+            std::cout << selectedModules[i] << std::endl;
+        }
+        
+        
     };
     
     box2.onChange = [this]() {
         selectedModules[1] = box2.getText();
+        updateButtons();
+        
         DBG("Box2 selected text: " + box2.getText());
+        for (int i = 0; i < 4; i++) {
+            std::cout << selectedModules[i] << std::endl;
+        }
     };
     
     box3.onChange = [this]() {
         selectedModules[2] = box3.getText();
+        updateButtons();
+        
         DBG("Box3 selected text: " + box3.getText());
+        for (int i = 0; i < 4; i++) {
+            std::cout << selectedModules[i] << std::endl;
+        }
 
     };
     
     box4.onChange = [this]() {
         selectedModules[3] = box4.getText();
+        updateButtons();
+        
         DBG("Box4 selected text: " + box4.getText());
+        for (int i = 0; i < 4; i++) {
+            std::cout << selectedModules[i] << std::endl;
+        }
     };
+    
+    
+    int oscCounter = 1, lfoCounter = 1, vcoCounter = 1;
+    for (int i = 0; i < 4; ++i)
+    {
+        juce::String module = selectedModules[i];
+        juce::TextButton* newButton = new juce::TextButton();
+        
+        
+        if (module == "None"){
+            
+            moduleButtons[i] = nullptr;
+        }
+        else if (module == "OSC")
+        {
+            newButton->setButtonText("OSC " + juce::String(oscCounter));
+
+            oscCounter++;
+            
+            moduleButtons[i] =newButton;
+            
+            addAndMakeVisible(newButton);
+
+        }
+        else if (module == "LFO")
+        {
+            newButton->setButtonText("LFO " + juce::String(lfoCounter));
+//            addAndMakeVisible(newButton);
+
+            lfoCounter++;
+            
+            moduleButtons[i] =newButton;
+            
+            addAndMakeVisible(newButton);
+
+        }
+        else if (module == "VCO")
+        {
+            newButton->setButtonText("VCO " + juce::String(vcoCounter));
+//            addAndMakeVisible(newButton);
+            
+            vcoCounter++;
+            
+            moduleButtons[i] =newButton;
+            
+            addAndMakeVisible(newButton);
+
+        }
+
+        DBG("Added button: " + newButton->getButtonText());
+
+    }
+    
+    
+    
+//    int padding = 5;
+//
+    smallerBox = window.reduced(10); // Smaller margins
+//    
+//    int buttonWidth = smallerBox.getWidth()/10;
+//    int buttonHeight = smallerBox.reduced(padding).getHeight();
+//    int buttonX  = smallerBox.reduced(padding).getX();
+//    int buttonY = smallerBox.reduced(padding).getY();
+//    
+//    
+//    
+//    for (auto* button : moduleButtons)  // Assuming `dials` is an array or vector of sliders
+//    {
+//        
+//        //this line causing issues.
+//        
+//        if (button != nullptr){
+//
+//            button->setBounds(buttonX, buttonY, buttonWidth, buttonHeight);
+//            
+//            buttonX+=65;
+//            
+//        }
+//
+//    }
+    
+    repaint();
+
+}
+
+
+void WebMatrixSynthAudioProcessorEditor::updateButtons()
+{
+    // Remove existing buttons from UI
+    for (auto* button : moduleButtons)
+    {
+        if (button != nullptr)
+        {
+            removeChildComponent(button);
+            delete button;
+        }
+    }
+    moduleButtons.clear();
+
+    // Counters for numbering each module
+    int oscCounter = 1, lfoCounter = 1, vcoCounter = 1;
+    
+    int padding = 5;
+
+    
+    int buttonWidth = smallerBox.getWidth()/10;
+    int buttonHeight = smallerBox.reduced(padding).getHeight();
+    int buttonX  = smallerBox.reduced(padding).getX();
+    int buttonY = smallerBox.reduced(padding).getY();
+
+    // Create new buttons based on selectedModules
+    for (int i = 0; i < 4; ++i)
+    {
+        juce::String module = selectedModules[i];
+        juce::TextButton* newButton = nullptr;
+
+        if (module == "OSC")
+        {
+            newButton = new juce::TextButton("OSC " + juce::String(oscCounter++));
+        }
+        else if (module == "LFO")
+        {
+            newButton = new juce::TextButton("LFO " + juce::String(lfoCounter++));
+        }
+        else if (module == "VCO")
+        {
+            newButton = new juce::TextButton("VCO " + juce::String(vcoCounter++));
+        }
+
+        if (newButton != nullptr)
+        {
+            moduleButtons.push_back(newButton);
+            
+            addAndMakeVisible(newButton);
+            
+            newButton->setBounds(buttonX, buttonY, buttonWidth, buttonHeight);
+            
+            buttonX+=65;
+        }
+    }
+
+    // Update layout
+    resized();
+    repaint();
 }
 
 WebMatrixSynthAudioProcessorEditor::~WebMatrixSynthAudioProcessorEditor()
@@ -88,7 +253,6 @@ void WebMatrixSynthAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
-    
     
     // Draw a smaller rectangle inside the drawable area
     g.setColour(juce::Colours::grey);
@@ -103,14 +267,8 @@ void WebMatrixSynthAudioProcessorEditor::resized()
     jassert (true);
     dial1.setBounds(getLocalBounds());
     
-
-
-    
     juce::Grid grid;
     
-    
-    
-
     
     // Define a 4x4 grid (4 columns, 4 rows)
     grid.templateColumns = {
@@ -131,7 +289,6 @@ void WebMatrixSynthAudioProcessorEditor::resized()
     
     // Add components to the grid
     grid.items = {
-        
         juce::GridItem(box1), juce::GridItem(dial1), juce::GridItem(dial2), juce::GridItem(dial3), juce::GridItem(dial4),
         juce::GridItem(box2), juce::GridItem(dial5), juce::GridItem(dial6), juce::GridItem(dial7), juce::GridItem(dial8),
         juce::GridItem(box3), juce::GridItem(dial9), juce::GridItem(dial10), juce::GridItem(dial11), juce::GridItem(dial12),
@@ -148,20 +305,10 @@ void WebMatrixSynthAudioProcessorEditor::resized()
     grid.performLayout(gridArea);
 
     
-    smallerBox = window.reduced(10); // Smaller margins
 
     
-    int padding = 5;
+//    myButton.setBounds(buttonX, buttonY, buttonWidth, buttonHeight);
 
-    
-    
-    int buttonWidth = smallerBox.getWidth()/10;
-    int buttonHeight = smallerBox.reduced(padding).getHeight();
-    int buttonX = smallerBox.reduced(padding).getX();
-    int buttonY = smallerBox.reduced(padding).getY();
-
-    myButton.setBounds(buttonX, buttonY, buttonWidth, buttonHeight);
-    
 
     repaint();
 
