@@ -34,6 +34,9 @@ private:
     
     juce::Slider dial1, dial2, dial3, dial4, dial5, dial6, dial7, dial8, dial9, dial10, dial11, dial12, dial13, dial14, dial15, dial16, oDial1, oDial2, oDial3, oDial4;
     
+    juce::Grid grid;
+
+    
     juce::ComboBox box1, box2, box3, box4;
     
     juce::Slider* dials[20] = {
@@ -57,9 +60,12 @@ private:
     juce::String selectedModules[4] = {"", "", "", ""};
     
     
-    std::vector<juce::TextButton*> moduleButtons{nullptr, nullptr, nullptr, nullptr};
+    std::vector<std::unique_ptr<juce::TextButton>> moduleButtons;
+    
 
+    juce::Label outputText;
 
+    std::unique_ptr<juce::TextButton> newButton; 
 
 
     juce::Rectangle<int> window;
@@ -68,3 +74,5 @@ private:
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WebMatrixSynthAudioProcessorEditor)
 };
+
+

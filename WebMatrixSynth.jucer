@@ -4,6 +4,9 @@
               addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn">
   <MAINGROUP id="BD5Fsa" name="WebMatrixSynth">
     <GROUP id="{1B221F3E-8124-8CA4-5B2F-56CC24E6F5E4}" name="Source">
+      <FILE id="U8yWdI" name="TextComponent.cpp" compile="1" resource="0"
+            file="Source/TextComponent.cpp"/>
+      <FILE id="zPUlda" name="TextComponent.h" compile="0" resource="0" file="Source/TextComponent.h"/>
       <FILE id="ytnQ6Y" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="KdodSa" name="PluginProcessor.h" compile="0" resource="0"
