@@ -292,13 +292,8 @@ void WebMatrixSynthAudioProcessorEditor::resized()
                           juce::Grid::TrackInfo(juce::Grid::Fr(1)),
                             juce::Grid::TrackInfo(juce::Grid::Fr(1))};
     
-
-
-    TextComponent myTextComponent("Output: ");
-    addAndMakeVisible(myTextComponent);
-    
-    myTextComponent.setBounds(50, 50, 200, 50);
-
+    myTextComponent = std::make_unique<TextComponent>("Output: ");
+    addAndMakeVisible(*myTextComponent);
 
     
     // Add components to the grid
@@ -307,13 +302,10 @@ void WebMatrixSynthAudioProcessorEditor::resized()
         juce::GridItem(box2), juce::GridItem(dial5), juce::GridItem(dial6), juce::GridItem(dial7), juce::GridItem(dial8),
         juce::GridItem(box3), juce::GridItem(dial9), juce::GridItem(dial10), juce::GridItem(dial11), juce::GridItem(dial12),
         juce::GridItem(box4), juce::GridItem(dial13), juce::GridItem(dial14), juce::GridItem(dial15), juce::GridItem(dial16),
-        juce::GridItem(myTextComponent), juce::GridItem(oDial1), juce::GridItem(oDial2), juce::GridItem(oDial3), juce::GridItem(oDial4),
+        juce::GridItem(*myTextComponent), juce::GridItem(oDial1), juce::GridItem(oDial2), juce::GridItem(oDial3), juce::GridItem(oDial4),
     };
     
-    myTextComponent.repaint();
  
-
-    
     window = getLocalBounds();
     
     topArea1 = window.removeFromTop(window.getHeight() * 0.70);

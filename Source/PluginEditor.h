@@ -10,6 +10,8 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "TextComponent.h"
+
 
 //==============================================================================
 /**
@@ -67,7 +69,7 @@ private:
 
     std::unique_ptr<juce::TextButton> newButton; 
 
-
+    std::unique_ptr<TextComponent> myTextComponent;
     juce::Rectangle<int> window;
     
     WebMatrixSynthAudioProcessor& audioProcessor;
