@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "TextComponent.h"
+#include "Modules/OSC/OSCComponent.h"
 
 
 //==============================================================================
@@ -53,6 +54,7 @@ private:
         &box1, &box2, &box3, &box4
     };
     
+    OSCComponent oscComponent;
 
     juce::TextButton myButton;
     juce::Rectangle<int> topArea1;

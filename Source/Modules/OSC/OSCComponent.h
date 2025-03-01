@@ -25,5 +25,16 @@ public:
     void resized() override;
 
 private:
+    juce::Slider pulseWidthDial, freqDial;
+    juce::ComboBox inputModeBox, waveTypeBox;
+    
+    juce::TextButton backButton;
+    
+    juce::Label freqLabel, pulseWidthLabel;
+    
+    juce::Rectangle<int> window, titleArea;
+
+    
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OSCComponent)
 };

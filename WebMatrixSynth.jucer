@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="UR9Gkn" name="WebMatrixSynth" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn">
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn"
+              headerPath="./Source/">
   <MAINGROUP id="BD5Fsa" name="WebMatrixSynth">
     <GROUP id="{1B221F3E-8124-8CA4-5B2F-56CC24E6F5E4}" name="Source">
+      <GROUP id="{CF0E1289-64BB-9569-C683-81F892925F71}" name="Modules">
+        <GROUP id="{FDF680D0-3BC6-FB93-CF4B-82FEA6848975}" name="OSC">
+          <FILE id="FJOUdv" name="OSCComponent.cpp" compile="1" resource="0"
+                file="Source/OSCComponent.cpp"/>
+          <FILE id="htRbGv" name="OSCComponent.h" compile="0" resource="0" file="Source/OSCComponent.h"/>
+        </GROUP>
+        <GROUP id="{2C0E839C-0FA9-8974-692F-9D0B996BA94F}" name="VCO"/>
+        <GROUP id="{0519E840-753A-E90A-CB5F-6D7E044DA807}" name="LFO"/>
+      </GROUP>
       <FILE id="U8yWdI" name="TextComponent.cpp" compile="1" resource="0"
             file="Source/TextComponent.cpp"/>
       <FILE id="zPUlda" name="TextComponent.h" compile="0" resource="0" file="Source/TextComponent.h"/>

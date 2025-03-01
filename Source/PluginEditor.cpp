@@ -20,6 +20,7 @@ WebMatrixSynthAudioProcessorEditor::WebMatrixSynthAudioProcessorEditor (WebMatri
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize (600, 400);
+    
     dial1.setSliderStyle(juce::Slider::Rotary);
     
     myButton.setButtonText("OSC");  // Set text of the button
@@ -163,6 +164,9 @@ WebMatrixSynthAudioProcessorEditor::WebMatrixSynthAudioProcessorEditor (WebMatri
 
     }
     
+    addAndMakeVisible (oscComponent);
+
+    
     
     
 //    int padding = 5;
@@ -271,6 +275,8 @@ void WebMatrixSynthAudioProcessorEditor::resized()
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
     
+    
+    
     jassert (true);
     dial1.setBounds(getLocalBounds());
     
@@ -308,6 +314,7 @@ void WebMatrixSynthAudioProcessorEditor::resized()
  
     window = getLocalBounds();
     
+    
     topArea1 = window.removeFromTop(window.getHeight() * 0.70);
     
     auto gridArea = topArea1.removeFromBottom(topArea1.getHeight() * 0.80);
@@ -321,6 +328,8 @@ void WebMatrixSynthAudioProcessorEditor::resized()
 //    myButton.setBounds(buttonX, buttonY, buttonWidth, buttonHeight);
 
 
+    oscComponent.setBounds (getLocalBounds());
+    
     repaint();
 
 }
