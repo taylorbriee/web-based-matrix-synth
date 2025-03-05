@@ -124,12 +124,5 @@ void OSCComponent::resized()
     freqLabel.setText("Frequency", juce::dontSendNotification);
     pulseWidthLabel.setText("Pulse Width", juce::dontSendNotification);
 
-
-
-    
-    
-    
-
-    
-
+ 
 }

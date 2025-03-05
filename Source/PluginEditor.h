@@ -28,6 +28,7 @@ public:
     void resized() override;
     
     void updateButtons();
+    void updateOutputBoxes(std::string, int);
 
 private:
     // This reference is provided as a quick way for your editor to
@@ -40,7 +41,7 @@ private:
     juce::Grid grid;
 
     
-    juce::ComboBox box1, box2, box3, box4;
+    juce::ComboBox inputBox1, inputBox2, inputBox3, inputBox4, outputBox1, outputBox2, outputBox3, outputBox4;
     
     juce::Slider* dials[20] = {
         &dial1, &dial2, &dial3, &dial4,
@@ -50,11 +51,15 @@ private:
         &oDial1, &oDial2, &oDial3, &oDial4
     };
     
-    juce::ComboBox* boxes[4] = {
-        &box1, &box2, &box3, &box4
+    juce::ComboBox* inputBoxes[4] = {
+        &inputBox1, &inputBox2, &inputBox3, &inputBox4
     };
     
-    OSCComponent oscComponent;
+    juce::ComboBox* outputBoxes[4] = {
+        &outputBox1, &outputBox2, &outputBox3, &outputBox4
+    };
+    
+    OSCComponent vcoComponent;
 
     juce::TextButton myButton;
     juce::Rectangle<int> topArea1;
@@ -72,6 +77,8 @@ private:
     std::unique_ptr<juce::TextButton> newButton; 
 
     std::unique_ptr<TextComponent> myTextComponent;
+    
+    std::vector<std::unique_ptr<juce::Component>> moduleComponents;
     juce::Rectangle<int> window;
     
     WebMatrixSynthAudioProcessor& audioProcessor;

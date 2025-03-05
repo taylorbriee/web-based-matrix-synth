@@ -11,6 +11,9 @@
 #include "TextComponent.h"
 #include <memory> // For std::unique_ptr
 #include <juce_gui_basics/juce_gui_basics.h> // Include JUCE basics
+#include <iostream>
+#include <format>
+
 
 
 //==============================================================================
@@ -23,29 +26,30 @@ WebMatrixSynthAudioProcessorEditor::WebMatrixSynthAudioProcessorEditor (WebMatri
     
     dial1.setSliderStyle(juce::Slider::Rotary);
     
-    myButton.setButtonText("OSC");  // Set text of the button
+    myButton.setButtonText("VCO");  // Set text of the button
     addAndMakeVisible(myButton);  // Make the button visible in the UI
     
     
     for (auto* dial : dials)  // Assuming `dials` is an array or vector of sliders
     {
         dial->setSliderStyle(juce::Slider::Rotary);
-        dial->setTextBoxStyle(juce::Slider::TextBoxRight, false, 30, 20);
+        dial->setTextBoxStyle(juce::Slider::TextBoxRight, false, 60, 20);
+        
+        dial->setRange(0.0, 10.0, 0.1);
 
         addAndMakeVisible(*dial);
     }
     
     
-    for (auto* box : boxes)  // Assuming `dials` is an array or vector of sliders
+    for (auto* box : inputBoxes)  // Assuming `dials` is an array or vector of sliders
     {
         
         box->addItem("None", 1);
 
         box->addSectionHeading("Generator Modules");
 
-        box->addItem("OSC", 2);
+        box->addItem("VCO", 2);
         box->addItem("LFO", 3);
-        box->addItem("VCO", 4);
 
         box->addSectionHeading("Outputs");
 
@@ -58,113 +62,61 @@ WebMatrixSynthAudioProcessorEditor::WebMatrixSynthAudioProcessorEditor (WebMatri
      
         
         addAndMakeVisible(box);
-
     }
     
-    box1.onChange = [this]() {
-        selectedModules[0] = box1.getText();
-        updateButtons();
-        
-        DBG("Box1 selected text: " + box1.getText());
-        for (int i = 0; i < 4; i++) {
-            std::cout << selectedModules[i] << std::endl;
-        }
-        
-        
-    };
-    
-    box2.onChange = [this]() {
-        selectedModules[1] = box2.getText();
-        updateButtons();
-        
-        DBG("Box2 selected text: " + box2.getText());
-        for (int i = 0; i < 4; i++) {
-            std::cout << selectedModules[i] << std::endl;
-        }
-    };
-    
-    box3.onChange = [this]() {
-        selectedModules[2] = box3.getText();
-        updateButtons();
-        
-        DBG("Box3 selected text: " + box3.getText());
-        for (int i = 0; i < 4; i++) {
-            std::cout << selectedModules[i] << std::endl;
-        }
-
-    };
-    
-    box4.onChange = [this]() {
-        selectedModules[3] = box4.getText();
-        updateButtons();
-        
-        DBG("Box4 selected text: " + box4.getText());
-        for (int i = 0; i < 4; i++) {
-            std::cout << selectedModules[i] << std::endl;
-        }
-    };
-    
-    
-    moduleButtons.clear();
-    moduleButtons.reserve(4);
-    
-    int oscCounter = 1, lfoCounter = 1, vcoCounter = 1;
-    for (int i = 0; i < 4; ++i)
+    for (auto* box : outputBoxes)  // Assuming `dials` is an array or vector of sliders
     {
-        juce::String module = selectedModules[i];
-        std::unique_ptr<juce::TextButton> newButton = std::make_unique<juce::TextButton>();
-
-        
-        if (module == "None"){
-            
-            moduleButtons.push_back(nullptr);
-
-        }
-        else if (module == "OSC")
-        {
-            newButton->setButtonText("OSC " + juce::String(oscCounter));
-
-            oscCounter++;
-            
-            moduleButtons.push_back(std::move(newButton));
-
-
-            
-                        
-            addAndMakeVisible(*newButton);
-
-        }
-        else if (module == "LFO")
-        {
-            newButton->setButtonText("LFO " + juce::String(lfoCounter));
-
-            lfoCounter++;
-            
-            moduleButtons.push_back(std::move(newButton));
-
-            
-            addAndMakeVisible(*newButton);
-
-        }
-        else if (module == "VCO")
-        {
-            newButton->setButtonText("VCO " + juce::String(vcoCounter));
-            
-            vcoCounter++;
-            
-            moduleButtons.push_back(std::move(newButton));
-
-            
-            
-            addAndMakeVisible(*newButton);
-
-        }
-
-        DBG("Added button: " + newButton->getButtonText());
-
+        addAndMakeVisible(box);
     }
     
-    addAndMakeVisible (oscComponent);
+    
+    
+    inputBox1.onChange = [this]() {
+        selectedModules[0] = inputBox1.getText();
+        updateButtons();
+        
+        DBG("Box1 selected text: " + inputBox1.getText());
+        for (int i = 0; i < 4; i++) {
+            std::cout << selectedModules[i] << std::endl;
+        }
+        
+        
+    };
+    
+    inputBox2.onChange = [this]() {
+        selectedModules[1] = inputBox2.getText();
+        updateButtons();
+        
+        DBG("Box2 selected text: " + inputBox2.getText());
+        for (int i = 0; i < 4; i++) {
+            std::cout << selectedModules[i] << std::endl;
+        }
+    };
+    
+    inputBox3.onChange = [this]() {
+        selectedModules[2] = inputBox3.getText();
+        updateButtons();
+        
+        DBG("Box3 selected text: " + inputBox3.getText());
+        for (int i = 0; i < 4; i++) {
+            std::cout << selectedModules[i] << std::endl;
+        }
+
+    };
+    
+    inputBox4.onChange = [this]() {
+        selectedModules[3] = inputBox4.getText();
+        updateButtons();
+        
+        DBG("Box4 selected text: " + inputBox4.getText());
+        for (int i = 0; i < 4; i++) {
+            std::cout << selectedModules[i] << std::endl;
+        }
+    };
+    
+    
+    
+//    addAndMakeVisible (vcoComponent);
 
     
     
@@ -206,7 +158,7 @@ void WebMatrixSynthAudioProcessorEditor::updateButtons()
     moduleButtons.clear();
 
     // Counters for numbering each module
-    int oscCounter = 1, lfoCounter = 1, vcoCounter = 1;
+    int vcoCounter = 1, lfoCounter = 1;
     
     int padding = 5;
 
@@ -215,27 +167,49 @@ void WebMatrixSynthAudioProcessorEditor::updateButtons()
     int buttonHeight = smallerBox.reduced(padding).getHeight();
     int buttonX  = smallerBox.reduced(padding).getX();
     int buttonY = smallerBox.reduced(padding).getY();
+    
+    for (auto* box : outputBoxes)
+    {
+        box->clear();
+    }
+    
+    int outputBoxItemID=1;
 
     // Create new buttons based on selectedModules
     for (int i = 0; i < 4; ++i)
     {
-    
-
-        
+            
         juce::String module = selectedModules[i];
 
-        if (module == "OSC")
+        if (module == "VCO")
         {
-            newButton = std::make_unique<juce::TextButton>("OSC " + juce::String(oscCounter++));
+            for (auto* box : outputBoxes)
+            {
+                box->addItem("Main Output", outputBoxItemID++);
+
+                box->addSectionHeading("VCO "+ std::to_string(vcoCounter));
+
+                box->addItem("Frequency", outputBoxItemID++);
+                box->addItem("Pulse Width", outputBoxItemID++);
+
+            }
+            newButton = std::make_unique<juce::TextButton>("VCO " + juce::String(vcoCounter++));
+            
         }
         else if (module == "LFO")
         {
+            for (auto* box : outputBoxes)
+            {
+
+                box->addSectionHeading("LFO "+ std::to_string(vcoCounter));
+
+                box->addItem("Frequency", outputBoxItemID++);
+                box->addItem("Pulse Width", outputBoxItemID++);
+
+            }
             newButton = std::make_unique<juce::TextButton>("LFO " + juce::String(lfoCounter++));
         }
-        else if (module == "VCO")
-        {
-            newButton = std::make_unique<juce::TextButton>("VCO " + juce::String(vcoCounter++));
-        }
+
         if (newButton != nullptr)
         {
             
@@ -254,6 +228,33 @@ void WebMatrixSynthAudioProcessorEditor::updateButtons()
     resized();
     repaint();
 }
+
+
+
+//when time comes use extra parameter to input a function to be called when dropout menues have been clicked.
+void WebMatrixSynthAudioProcessorEditor::updateOutputBoxes(std::string modType, int modNum)
+{
+
+
+    
+    if (modType == "VCO")
+    {
+
+    }
+    else if (modType == "LFO")
+    {
+        for (auto* box : outputBoxes)
+        {
+
+        }
+
+    }
+
+    
+    
+}
+
+
 
 WebMatrixSynthAudioProcessorEditor::~WebMatrixSynthAudioProcessorEditor()
 {
@@ -296,7 +297,8 @@ void WebMatrixSynthAudioProcessorEditor::resized()
                           juce::Grid::TrackInfo(juce::Grid::Fr(1)),
                           juce::Grid::TrackInfo(juce::Grid::Fr(1)),
                           juce::Grid::TrackInfo(juce::Grid::Fr(1)),
-                            juce::Grid::TrackInfo(juce::Grid::Fr(1))};
+                            juce::Grid::TrackInfo(juce::Grid::Fr(1)),
+        juce::Grid::TrackInfo(juce::Grid::Fr(1))};
     
     myTextComponent = std::make_unique<TextComponent>("Output: ");
     addAndMakeVisible(*myTextComponent);
@@ -304,11 +306,12 @@ void WebMatrixSynthAudioProcessorEditor::resized()
     
     // Add components to the grid
     grid.items = {
-        juce::GridItem(box1), juce::GridItem(dial1), juce::GridItem(dial2), juce::GridItem(dial3), juce::GridItem(dial4),
-        juce::GridItem(box2), juce::GridItem(dial5), juce::GridItem(dial6), juce::GridItem(dial7), juce::GridItem(dial8),
-        juce::GridItem(box3), juce::GridItem(dial9), juce::GridItem(dial10), juce::GridItem(dial11), juce::GridItem(dial12),
-        juce::GridItem(box4), juce::GridItem(dial13), juce::GridItem(dial14), juce::GridItem(dial15), juce::GridItem(dial16),
+        juce::GridItem(inputBox1), juce::GridItem(dial1), juce::GridItem(dial2), juce::GridItem(dial3), juce::GridItem(dial4),
+        juce::GridItem(inputBox2), juce::GridItem(dial5), juce::GridItem(dial6), juce::GridItem(dial7), juce::GridItem(dial8),
+        juce::GridItem(inputBox3), juce::GridItem(dial9), juce::GridItem(dial10), juce::GridItem(dial11), juce::GridItem(dial12),
+        juce::GridItem(inputBox4), juce::GridItem(dial13), juce::GridItem(dial14), juce::GridItem(dial15), juce::GridItem(dial16),
         juce::GridItem(*myTextComponent), juce::GridItem(oDial1), juce::GridItem(oDial2), juce::GridItem(oDial3), juce::GridItem(oDial4),
+        juce::GridItem(), juce::GridItem(outputBox1), juce::GridItem(outputBox2), juce::GridItem(outputBox3), juce::GridItem(outputBox4)
     };
     
  
@@ -317,7 +320,7 @@ void WebMatrixSynthAudioProcessorEditor::resized()
     
     topArea1 = window.removeFromTop(window.getHeight() * 0.70);
     
-    auto gridArea = topArea1.removeFromBottom(topArea1.getHeight() * 0.80);
+    auto gridArea = topArea1.removeFromBottom(topArea1.getHeight() * 0.95);
     
     grid.performLayout(gridArea);
     
@@ -328,7 +331,7 @@ void WebMatrixSynthAudioProcessorEditor::resized()
 //    myButton.setBounds(buttonX, buttonY, buttonWidth, buttonHeight);
 
 
-    oscComponent.setBounds (getLocalBounds());
+    vcoComponent.setBounds (getLocalBounds());
     
     repaint();
 
