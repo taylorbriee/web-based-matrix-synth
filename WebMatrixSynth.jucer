@@ -6,6 +6,7 @@
   <MAINGROUP id="BD5Fsa" name="WebMatrixSynth">
     <GROUP id="{1B221F3E-8124-8CA4-5B2F-56CC24E6F5E4}" name="Source">
       <GROUP id="{CF0E1289-64BB-9569-C683-81F892925F71}" name="Modules">
+        <FILE id="sLJ937" name="BaseComponent.h" compile="0" resource="0" file="Source/Modules/BaseComponent.h"/>
         <GROUP id="{FDF680D0-3BC6-FB93-CF4B-82FEA6848975}" name="OSC">
           <FILE id="FJOUdv" name="OSCComponent.cpp" compile="1" resource="0"
                 file="Source/OSCComponent.cpp"/>

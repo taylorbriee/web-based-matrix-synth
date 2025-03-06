@@ -30,8 +30,8 @@
             filePath = "../../Source/PluginEditor.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "215"
-            endingLineNumber = "215"
+            startingLineNumber = "218"
+            endingLineNumber = "218"
             landmarkName = "WebMatrixSynthAudioProcessorEditor::updateButtons()"
             landmarkType = "7">
          </BreakpointContent>
@@ -62,9 +62,9 @@
             filePath = "../../Source/PluginEditor.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "308"
-            endingLineNumber = "308"
-            landmarkName = "WebMatrixSynthAudioProcessorEditor::updateOutputBoxes(modType, modNum)"
+            startingLineNumber = "311"
+            endingLineNumber = "311"
+            landmarkName = "WebMatrixSynthAudioProcessorEditor::resized()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -78,9 +78,9 @@
             filePath = "../../Source/PluginEditor.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "313"
-            endingLineNumber = "313"
-            landmarkName = "WebMatrixSynthAudioProcessorEditor::updateOutputBoxes(modType, modNum)"
+            startingLineNumber = "316"
+            endingLineNumber = "316"
+            landmarkName = "WebMatrixSynthAudioProcessorEditor::resized()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

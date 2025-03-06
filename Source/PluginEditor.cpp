@@ -44,7 +44,7 @@ WebMatrixSynthAudioProcessorEditor::WebMatrixSynthAudioProcessorEditor (WebMatri
     for (auto* box : inputBoxes)  // Assuming `dials` is an array or vector of sliders
     {
         
-        box->addItem("None", 1);
+        box->addItem(" ", 1);
 
         box->addSectionHeading("Generator Modules");
 
@@ -185,6 +185,8 @@ void WebMatrixSynthAudioProcessorEditor::updateButtons()
         {
             for (auto* box : outputBoxes)
             {
+                box->addItem(" ", outputBoxItemID++);
+                
                 box->addItem("Main Output", outputBoxItemID++);
 
                 box->addSectionHeading("VCO "+ std::to_string(vcoCounter));
@@ -200,6 +202,7 @@ void WebMatrixSynthAudioProcessorEditor::updateButtons()
         {
             for (auto* box : outputBoxes)
             {
+                box->addItem(" ", outputBoxItemID++);
 
                 box->addSectionHeading("LFO "+ std::to_string(vcoCounter));
 
