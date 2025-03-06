@@ -11,11 +11,12 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "../BaseComponent.h"
+
 
 //==============================================================================
-/*
-*/
-class OSCComponent  : public juce::Component
+
+class OSCComponent : public BaseComponent
 {
 public:
     OSCComponent();
@@ -23,7 +24,10 @@ public:
 
     void paint (juce::Graphics&) override;
     void resized() override;
-
+    
+    void loadState() override;
+    void saveState() override;
+    
 private:
     juce::Slider pulseWidthDial, freqDial;
     juce::ComboBox inputModeBox, waveTypeBox;
@@ -33,6 +37,9 @@ private:
     juce::Label freqLabel, pulseWidthLabel;
     
     juce::Rectangle<int> window, titleArea;
+    
+    juce::ValueTree vcoState { "VCO" };
+
 
     
     

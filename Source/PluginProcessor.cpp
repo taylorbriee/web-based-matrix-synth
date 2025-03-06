@@ -179,7 +179,7 @@ bool WebMatrixSynthAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* WebMatrixSynthAudioProcessor::createEditor()
 {
-    return new WebMatrixSynthAudioProcessorEditor (*this);
+    return new PluginEditor (*this);
 }
 
 //==============================================================================

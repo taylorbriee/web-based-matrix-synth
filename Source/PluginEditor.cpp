@@ -17,7 +17,7 @@
 
 
 //==============================================================================
-WebMatrixSynthAudioProcessorEditor::WebMatrixSynthAudioProcessorEditor (WebMatrixSynthAudioProcessor& p)
+PluginEditor::PluginEditor (WebMatrixSynthAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
     // Make sure that before the constructor has finished, you've set the
@@ -73,19 +73,17 @@ WebMatrixSynthAudioProcessorEditor::WebMatrixSynthAudioProcessorEditor (WebMatri
     
     inputBox1.onChange = [this]() {
         selectedModules[0] = inputBox1.getText();
-        updateButtons();
+        updateButtons(0, inputBox1.getText());
         
         DBG("Box1 selected text: " + inputBox1.getText());
         for (int i = 0; i < 4; i++) {
             std::cout << selectedModules[i] << std::endl;
         }
-        
-        
     };
     
     inputBox2.onChange = [this]() {
         selectedModules[1] = inputBox2.getText();
-        updateButtons();
+        updateButtons(1, inputBox2.getText());
         
         DBG("Box2 selected text: " + inputBox2.getText());
         for (int i = 0; i < 4; i++) {
@@ -95,7 +93,7 @@ WebMatrixSynthAudioProcessorEditor::WebMatrixSynthAudioProcessorEditor (WebMatri
     
     inputBox3.onChange = [this]() {
         selectedModules[2] = inputBox3.getText();
-        updateButtons();
+        updateButtons(2, inputBox3.getText());
         
         DBG("Box3 selected text: " + inputBox3.getText());
         for (int i = 0; i < 4; i++) {
@@ -106,7 +104,7 @@ WebMatrixSynthAudioProcessorEditor::WebMatrixSynthAudioProcessorEditor (WebMatri
     
     inputBox4.onChange = [this]() {
         selectedModules[3] = inputBox4.getText();
-        updateButtons();
+        updateButtons(3, inputBox4.getText());
         
         DBG("Box4 selected text: " + inputBox4.getText());
         for (int i = 0; i < 4; i++) {
@@ -114,49 +112,23 @@ WebMatrixSynthAudioProcessorEditor::WebMatrixSynthAudioProcessorEditor (WebMatri
         }
     };
     
-    
-    
-//    addAndMakeVisible (vcoComponent);
+
+
 
     
+
     
-    
-//    int padding = 5;
-//
+
     smallerBox = window.reduced(10); // Smaller margins
-//    
-//    int buttonWidth = smallerBox.getWidth()/10;
-//    int buttonHeight = smallerBox.reduced(padding).getHeight();
-//    int buttonX  = smallerBox.reduced(padding).getX();
-//    int buttonY = smallerBox.reduced(padding).getY();
-//    
-//    
-//    
-//    for (auto* button : moduleButtons)  // Assuming `dials` is an array or vector of sliders
-//    {
-//        
-//        //this line causing issues.
-//        
-//        if (button != nullptr){
-//
-//            button->setBounds(buttonX, buttonY, buttonWidth, buttonHeight);
-//            
-//            buttonX+=65;
-//            
-//        }
-//
-//    }
-    
     repaint();
 
 }
 
 
-void WebMatrixSynthAudioProcessorEditor::updateButtons()
+void PluginEditor::updateButtons(int index, juce::String updateTo)
 {
 
-    moduleButtons.clear();
-
+    
     // Counters for numbering each module
     int vcoCounter = 1, lfoCounter = 1;
     
@@ -175,57 +147,73 @@ void WebMatrixSynthAudioProcessorEditor::updateButtons()
     
     int outputBoxItemID=1;
 
-    // Create new buttons based on selectedModules
-    for (int i = 0; i < 4; ++i)
+    for (auto* box : outputBoxes)
     {
-            
-        juce::String module = selectedModules[i];
+        box->addItem(" ", outputBoxItemID++);
+        box->addItem("Main Output", outputBoxItemID++);
 
-        if (module == "VCO")
-        {
-            for (auto* box : outputBoxes)
-            {
-                box->addItem(" ", outputBoxItemID++);
-                
-                box->addItem("Main Output", outputBoxItemID++);
-
-                box->addSectionHeading("VCO "+ std::to_string(vcoCounter));
-
-                box->addItem("Frequency", outputBoxItemID++);
-                box->addItem("Pulse Width", outputBoxItemID++);
-
-            }
-            newButton = std::make_unique<juce::TextButton>("VCO " + juce::String(vcoCounter++));
-            
-        }
-        else if (module == "LFO")
-        {
-            for (auto* box : outputBoxes)
-            {
-                box->addItem(" ", outputBoxItemID++);
-
-                box->addSectionHeading("LFO "+ std::to_string(vcoCounter));
-
-                box->addItem("Frequency", outputBoxItemID++);
-                box->addItem("Pulse Width", outputBoxItemID++);
-
-            }
-            newButton = std::make_unique<juce::TextButton>("LFO " + juce::String(lfoCounter++));
-        }
-
-        if (newButton != nullptr)
-        {
-            
-            addAndMakeVisible(*newButton);
-            
-            newButton->setBounds(buttonX, buttonY, buttonWidth, buttonHeight);
-            
-            buttonX+=65;
-            
-            moduleButtons.push_back(std::move(newButton));
-
-        }
     }
+    
+// Create new buttons based on selectedModules
+
+        
+    juce::String module = selectedModules[index];
+
+    if (module == "VCO")
+    {
+        
+        moduleComponents[index] = std::make_unique<OSCComponent>();
+        
+        newButton = std::make_unique<juce::TextButton>("VCO " + juce::String(vcoCounter++));
+        
+        //HERE
+        newButton->onClick = [this, index]() {
+//                this->setVisible(false);
+
+            addAndMakeVisible(*moduleComponents[index]);
+            moduleComponents[index]->setBounds(getLocalBounds());
+            
+            
+        };
+
+
+        for (auto* box : outputBoxes)
+        {
+            box->addSectionHeading("VCO "+ std::to_string(vcoCounter));
+
+            box->addItem("Frequency", outputBoxItemID++);
+            box->addItem("Pulse Width", outputBoxItemID++);
+
+        }
+        
+    }
+    else if (module == "LFO")
+    {
+        for (auto* box : outputBoxes)
+        {
+            box->addSectionHeading("LFO "+ std::to_string(vcoCounter));
+
+            box->addItem("Frequency", outputBoxItemID++);
+            box->addItem("Pulse Width", outputBoxItemID++);
+
+        }
+        newButton = std::make_unique<juce::TextButton>("LFO " + juce::String(lfoCounter++));
+    }
+
+    if (newButton != nullptr)
+    {
+        
+        addAndMakeVisible(*newButton);
+        
+        newButton->setBounds(buttonX, buttonY, buttonWidth, buttonHeight);
+        
+        buttonX+=65;
+        
+        moduleButtons[index].reset();
+        moduleButtons[index]= std::move(newButton);
+
+    }
+    
 
     // Update layout
     resized();
@@ -235,7 +223,7 @@ void WebMatrixSynthAudioProcessorEditor::updateButtons()
 
 
 //when time comes use extra parameter to input a function to be called when dropout menues have been clicked.
-void WebMatrixSynthAudioProcessorEditor::updateOutputBoxes(std::string modType, int modNum)
+void PluginEditor::updateOutputBoxes(std::string modType, int modNum)
 {
 
 
@@ -259,12 +247,12 @@ void WebMatrixSynthAudioProcessorEditor::updateOutputBoxes(std::string modType, 
 
 
 
-WebMatrixSynthAudioProcessorEditor::~WebMatrixSynthAudioProcessorEditor()
+PluginEditor::~PluginEditor()
 {
 }
 
 //==============================================================================
-void WebMatrixSynthAudioProcessorEditor::paint (juce::Graphics& g)
+void PluginEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
@@ -274,7 +262,7 @@ void WebMatrixSynthAudioProcessorEditor::paint (juce::Graphics& g)
     g.fillRect(smallerBox);
 }
 
-void WebMatrixSynthAudioProcessorEditor::resized()
+void PluginEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
@@ -330,11 +318,8 @@ void WebMatrixSynthAudioProcessorEditor::resized()
 
     
 
-    
-//    myButton.setBounds(buttonX, buttonY, buttonWidth, buttonHeight);
 
 
-    vcoComponent.setBounds (getLocalBounds());
     
     repaint();
 

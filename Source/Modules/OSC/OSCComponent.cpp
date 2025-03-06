@@ -11,11 +11,13 @@
 #include <JuceHeader.h>
 #include "OSCComponent.h"
 
+
 //==============================================================================
 OSCComponent::OSCComponent()
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
+    DBG("OSCComponent Constructor Called");
 
 }
 
@@ -117,6 +119,10 @@ void OSCComponent::resized()
     addAndMakeVisible(backButton);
     backButton.setButtonText("Back");
     backButton.setBounds(bottomSeg3);
+    
+    backButton.onClick = [this]() {
+        this->setVisible(false);
+    };
 
     addAndMakeVisible(freqLabel);
     addAndMakeVisible(pulseWidthLabel);
@@ -125,4 +131,19 @@ void OSCComponent::resized()
     pulseWidthLabel.setText("Pulse Width", juce::dontSendNotification);
 
  
+}
+
+void OSCComponent::loadState()
+{
+    if (vcoState.hasProperty("freq"))
+        freqDial.setValue(vcoState.getProperty("freq"));
+    
+    if (vcoState.hasProperty("pulseWidth"))
+        pulseWidthDial.setValue(vcoState.getProperty("pulseWidth"));
+}
+
+void OSCComponent::saveState()
+{
+    vcoState.setProperty("freq", freqDial.getValue(), nullptr);
+    vcoState.setProperty("pulseWidth", pulseWidthDial.getValue(), nullptr);
 }

@@ -29,6 +29,7 @@
 		0D59BF4BC190214349DD7F4B /* juce_VST3ManifestHelper.mm */ = {isa = PBXBuildFile; fileRef = A40DC1F0652CC7BFD1A7E76D; settings = { COMPILER_FLAGS = "-fobjc-arc -w -DJUCE_SKIP_PRECOMPILED_HEADER"; }; };
 		0FF093A5170DACFF1565C130 /* include_juce_dsp.mm */ = {isa = PBXBuildFile; fileRef = 48EF27EE9118382B99FB7E79; };
 		17C25EA100A88290C56D3C74 /* AudioUnit.framework */ = {isa = PBXBuildFile; fileRef = DEA8C9DD592C2E46EA39A8CC; };
+		1E38E6128A67854D07EC9474 /* OSCComponent.cpp */ = {isa = PBXBuildFile; fileRef = E4ED4D3C23455107B0711B5E; };
 		3210D6CE3AC42C433136D61B /* include_juce_graphics_Harfbuzz.cpp */ = {isa = PBXBuildFile; fileRef = FD2357F887E4018C64054E17; };
 		3A82A75798EA597745FAA171 /* include_juce_audio_plugin_client_AU_2.mm */ = {isa = PBXBuildFile; fileRef = 13DD47A319C15300FF4039D4; };
 		3B0DF4E3CCACD17F1C1B1E17 /* Shared Code */ = {isa = PBXBuildFile; fileRef = 7BF8214B6156B06802E60106; };
@@ -65,7 +66,6 @@
 		CCBDB59BF3F8367EBDFFFC8E /* include_juce_audio_processors_lv2_libs.cpp */ = {isa = PBXBuildFile; fileRef = 36D0F4F3C3850BA91C1FD916; };
 		CF598B18CA99F4DF82F89CFB /* include_juce_events.mm */ = {isa = PBXBuildFile; fileRef = 2471287020AAAEAAD6D1CEB6; };
 		E5254CD84A81C084D11F6C5E /* CoreMIDI.framework */ = {isa = PBXBuildFile; fileRef = D16A74D9797F4C22554EE509; };
-		E6D4E1C155A05A5788760EDF /* OSCComponent.cpp */ = {isa = PBXBuildFile; fileRef = FC7485E2FEB738D808803002; };
 		E93CB71BF1B11CDFC4A8044F /* include_juce_core.mm */ = {isa = PBXBuildFile; fileRef = 265EAE82CF7123AB4339B05B; };
 		EAD02B9838029EBA6932475E /* include_juce_audio_formats.mm */ = {isa = PBXBuildFile; fileRef = 3906738C1FB8E5FF42DD0256; };
 		EC6D5D8A22228221D946FB63 /* PluginProcessor.cpp */ = {isa = PBXBuildFile; fileRef = 6DBB888DE1FC6256BD433FE8; };
@@ -133,7 +133,6 @@
 		C18D4E98BE06600CFA27CF0B /* MetalKit.framework */ /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
 		C84BCD3C3BD58B30921EE6E1 /* juce_graphics */ /* juce_graphics */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_graphics; path = /Applications/JUCE/modules/juce_graphics; sourceTree = "<absolute>"; };
 		CADC694AD481B5558564EEFC /* VST3 */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WebMatrixSynth.vst3; sourceTree = BUILT_PRODUCTS_DIR; };
-		CD0F09DB4A67F61F29EA7C9F /* OSCComponent.h */ /* OSCComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OSCComponent.h; path = ../../Source/OSCComponent.h; sourceTree = SOURCE_ROOT; };
 		CFA6F595F42CB60219AFEF6F /* Cocoa.framework */ /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		D16A74D9797F4C22554EE509 /* CoreMIDI.framework */ /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = System/Library/Frameworks/CoreMIDI.framework; sourceTree = SDKROOT; };
 		DB1D13520716F0CF3AEEC973 /* PluginEditor.cpp */ /* PluginEditor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PluginEditor.cpp; path = ../../Source/PluginEditor.cpp; sourceTree = SOURCE_ROOT; };
@@ -142,13 +141,14 @@
 		DEA8C9DD592C2E46EA39A8CC /* AudioUnit.framework */ /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		DF0F81F2C08F320D20E24F13 /* Accelerate.framework */ /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		E013AF3EFD35B33B288170BF /* VST3 Manifest Helper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = juce_vst3_helper; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4ED4D3C23455107B0711B5E /* OSCComponent.cpp */ /* OSCComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = OSCComponent.cpp; path = ../../Source/Modules/OSC/OSCComponent.cpp; sourceTree = SOURCE_ROOT; };
 		E696D91F20F6E02D6D79105B /* include_juce_audio_processors.mm */ /* include_juce_audio_processors.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_processors.mm; path = ../../JuceLibraryCode/include_juce_audio_processors.mm; sourceTree = SOURCE_ROOT; };
 		EB737C7E233450DECF83E15F /* SynthVoice.h */ /* SynthVoice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SynthVoice.h; path = ../../Source/SynthVoice.h; sourceTree = SOURCE_ROOT; };
+		EB7C8F5C891400CB3EBA2BB3 /* OSCComponent.h */ /* OSCComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OSCComponent.h; path = ../../Source/Modules/OSC/OSCComponent.h; sourceTree = SOURCE_ROOT; };
 		EBA98170EFC78BA6D4059A7F /* include_juce_graphics.mm */ /* include_juce_graphics.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_graphics.mm; path = ../../JuceLibraryCode/include_juce_graphics.mm; sourceTree = SOURCE_ROOT; };
 		EFB2D60F8F5350A759B3AFEC /* WebKit.framework */ /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		F0021CCFC3C14CFCA848CB99 /* JucePluginDefines.h */ /* JucePluginDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JucePluginDefines.h; path = ../../JuceLibraryCode/JucePluginDefines.h; sourceTree = SOURCE_ROOT; };
 		F51FA381DCC355812B3B41EA /* include_juce_audio_plugin_client_ARA.cpp */ /* include_juce_audio_plugin_client_ARA.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = include_juce_audio_plugin_client_ARA.cpp; path = ../../JuceLibraryCode/include_juce_audio_plugin_client_ARA.cpp; sourceTree = SOURCE_ROOT; };
-		FC7485E2FEB738D808803002 /* OSCComponent.cpp */ /* OSCComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = OSCComponent.cpp; path = ../../Source/OSCComponent.cpp; sourceTree = SOURCE_ROOT; };
 		FD2357F887E4018C64054E17 /* include_juce_graphics_Harfbuzz.cpp */ /* include_juce_graphics_Harfbuzz.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = include_juce_graphics_Harfbuzz.cpp; path = ../../JuceLibraryCode/include_juce_graphics_Harfbuzz.cpp; sourceTree = SOURCE_ROOT; };
 		FDA6452FCDC1FD0730F1189F /* include_juce_gui_basics.mm */ /* include_juce_gui_basics.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_gui_basics.mm; path = ../../JuceLibraryCode/include_juce_gui_basics.mm; sourceTree = SOURCE_ROOT; };
 		FF811CE426439878A0763106 /* Info-VST3_Manifest_Helper.plist */ /* Info-VST3_Manifest_Helper.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Info-VST3_Manifest_Helper.plist"; path = "Info-VST3_Manifest_Helper.plist"; sourceTree = SOURCE_ROOT; };
@@ -390,8 +390,8 @@
 		AE6150EEA7F2AE55502E710F /* OSC */ = {
 			isa = PBXGroup;
 			children = (
-				FC7485E2FEB738D808803002,
-				CD0F09DB4A67F61F29EA7C9F,
+				E4ED4D3C23455107B0711B5E,
+				EB7C8F5C891400CB3EBA2BB3,
 			);
 			name = OSC;
 			sourceTree = "<group>";
@@ -746,7 +746,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E6D4E1C155A05A5788760EDF,
+				1E38E6128A67854D07EC9474,
 				9D33CDD2A2E8E6F08CE464CD,
 				EC6D5D8A22228221D946FB63,
 				6FFF582B8FFB1B49DA0A7E8D,
@@ -916,13 +916,14 @@
 					"$(SRCROOT)/../../JuceLibraryCode",
 					"/Applications/JUCE/modules",
 					"$(SRCROOT)/./Source/",
+					"$(SRCROOT)/./Source/Modules/",
 					"/Applications/JUCE/modules/juce_audio_plugin_client/AU",
 					"$(inherited)",
 				);
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules $(SRCROOT)/./Source/ /Applications/JUCE/modules/juce_audio_plugin_client/AU";
+				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules $(SRCROOT)/./Source/ $(SRCROOT)/./Source/Modules/ /Applications/JUCE/modules/juce_audio_plugin_client/AU";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.WebMatrixSynth;
 				PRODUCT_NAME = "WebMatrixSynth";
 				SKIP_INSTALL = YES;
@@ -1025,12 +1026,13 @@
 					"$(SRCROOT)/../../JuceLibraryCode",
 					"/Applications/JUCE/modules",
 					"$(SRCROOT)/./Source/",
+					"$(SRCROOT)/./Source/Modules/",
 					"/Applications/JUCE/modules/juce_audio_plugin_client/AU",
 					"$(inherited)",
 				);
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules $(SRCROOT)/./Source/ /Applications/JUCE/modules/juce_audio_plugin_client/AU";
+				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules $(SRCROOT)/./Source/ $(SRCROOT)/./Source/Modules/ /Applications/JUCE/modules/juce_audio_plugin_client/AU";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.WebMatrixSynth;
 				PRODUCT_NAME = "WebMatrixSynth";
 				SKIP_INSTALL = YES;
@@ -1132,13 +1134,14 @@
 					"$(SRCROOT)/../../JuceLibraryCode",
 					"/Applications/JUCE/modules",
 					"$(SRCROOT)/./Source/",
+					"$(SRCROOT)/./Source/Modules/",
 					"/Applications/JUCE/modules/juce_audio_plugin_client/AU",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = Info-VST3_Manifest_Helper.plist;
 				INFOPLIST_PREPROCESS = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules $(SRCROOT)/./Source/ /Applications/JUCE/modules/juce_audio_plugin_client/AU";
+				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules $(SRCROOT)/./Source/ $(SRCROOT)/./Source/Modules/ /Applications/JUCE/modules/juce_audio_plugin_client/AU";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.WebMatrixSynth;
 				PRODUCT_NAME = "juce_vst3_helper";
 				USE_HEADERMAP = NO;
@@ -1239,6 +1242,7 @@
 					"$(SRCROOT)/../../JuceLibraryCode",
 					"/Applications/JUCE/modules",
 					"$(SRCROOT)/./Source/",
+					"$(SRCROOT)/./Source/Modules/",
 					"/Applications/JUCE/modules/juce_audio_plugin_client/AU",
 					"$(inherited)",
 				);
@@ -1246,7 +1250,7 @@
 				INFOPLIST_PREPROCESS = NO;
 				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules $(SRCROOT)/./Source/ /Applications/JUCE/modules/juce_audio_plugin_client/AU";
+				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules $(SRCROOT)/./Source/ $(SRCROOT)/./Source/Modules/ /Applications/JUCE/modules/juce_audio_plugin_client/AU";
 				OTHER_LDFLAGS = "-lWebMatrixSynth";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.WebMatrixSynth;
 				PRODUCT_NAME = "WebMatrixSynth";
@@ -1414,6 +1418,7 @@
 					"$(SRCROOT)/../../JuceLibraryCode",
 					"/Applications/JUCE/modules",
 					"$(SRCROOT)/./Source/",
+					"$(SRCROOT)/./Source/Modules/",
 					"/Applications/JUCE/modules/juce_audio_plugin_client/AU",
 					"$(inherited)",
 				);
@@ -1422,7 +1427,7 @@
 				INSTALL_PATH = "$(HOME)/Library/Audio/Plug-Ins/Components/";
 				LIBRARY_STYLE = Bundle;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules $(SRCROOT)/./Source/ /Applications/JUCE/modules/juce_audio_plugin_client/AU";
+				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules $(SRCROOT)/./Source/ $(SRCROOT)/./Source/Modules/ /Applications/JUCE/modules/juce_audio_plugin_client/AU";
 				OTHER_LDFLAGS = "-bundle -lWebMatrixSynth";
 				OTHER_REZFLAGS = "-d ppc_$ppc -d i386_$i386 -d ppc64_$ppc64 -d x86_64_$x86_64 -d arm64_$arm64 -I /System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework/Versions/A/Headers -I \"$(DEVELOPER_DIR)/Extras/CoreAudio/AudioUnits/AUPublic/AUBase\" -I \"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AudioUnit.framework/Headers\"";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.WebMatrixSynth;
@@ -1527,6 +1532,7 @@
 					"$(SRCROOT)/../../JuceLibraryCode",
 					"/Applications/JUCE/modules",
 					"$(SRCROOT)/./Source/",
+					"$(SRCROOT)/./Source/Modules/",
 					"/Applications/JUCE/modules/juce_audio_plugin_client/AU",
 					"$(inherited)",
 				);
@@ -1536,7 +1542,7 @@
 				LIBRARY_STYLE = Bundle;
 				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules $(SRCROOT)/./Source/ /Applications/JUCE/modules/juce_audio_plugin_client/AU";
+				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules $(SRCROOT)/./Source/ $(SRCROOT)/./Source/Modules/ /Applications/JUCE/modules/juce_audio_plugin_client/AU";
 				OTHER_LDFLAGS = "-bundle -lWebMatrixSynth";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.WebMatrixSynth;
 				PRODUCT_NAME = "WebMatrixSynth";
@@ -1639,6 +1645,7 @@
 					"$(SRCROOT)/../../JuceLibraryCode",
 					"/Applications/JUCE/modules",
 					"$(SRCROOT)/./Source/",
+					"$(SRCROOT)/./Source/Modules/",
 					"/Applications/JUCE/modules/juce_audio_plugin_client/AU",
 					"$(inherited)",
 				);
@@ -1646,7 +1653,7 @@
 				INFOPLIST_PREPROCESS = NO;
 				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules $(SRCROOT)/./Source/ /Applications/JUCE/modules/juce_audio_plugin_client/AU";
+				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules $(SRCROOT)/./Source/ $(SRCROOT)/./Source/Modules/ /Applications/JUCE/modules/juce_audio_plugin_client/AU";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.WebMatrixSynth;
 				PRODUCT_NAME = "juce_vst3_helper";
 				USE_HEADERMAP = NO;
@@ -1748,6 +1755,7 @@
 					"$(SRCROOT)/../../JuceLibraryCode",
 					"/Applications/JUCE/modules",
 					"$(SRCROOT)/./Source/",
+					"$(SRCROOT)/./Source/Modules/",
 					"/Applications/JUCE/modules/juce_audio_plugin_client/AU",
 					"$(inherited)",
 				);
@@ -1757,7 +1765,7 @@
 				LIBRARY_STYLE = Bundle;
 				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules $(SRCROOT)/./Source/ /Applications/JUCE/modules/juce_audio_plugin_client/AU";
+				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules $(SRCROOT)/./Source/ $(SRCROOT)/./Source/Modules/ /Applications/JUCE/modules/juce_audio_plugin_client/AU";
 				OTHER_LDFLAGS = "-bundle -lWebMatrixSynth";
 				OTHER_REZFLAGS = "-d ppc_$ppc -d i386_$i386 -d ppc64_$ppc64 -d x86_64_$x86_64 -d arm64_$arm64 -I /System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework/Versions/A/Headers -I \"$(DEVELOPER_DIR)/Extras/CoreAudio/AudioUnits/AUPublic/AUBase\" -I \"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AudioUnit.framework/Headers\"";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.WebMatrixSynth;
@@ -1861,13 +1869,14 @@
 					"$(SRCROOT)/../../JuceLibraryCode",
 					"/Applications/JUCE/modules",
 					"$(SRCROOT)/./Source/",
+					"$(SRCROOT)/./Source/Modules/",
 					"/Applications/JUCE/modules/juce_audio_plugin_client/AU",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = Info-Standalone_Plugin.plist;
 				INFOPLIST_PREPROCESS = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules $(SRCROOT)/./Source/ /Applications/JUCE/modules/juce_audio_plugin_client/AU";
+				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules $(SRCROOT)/./Source/ $(SRCROOT)/./Source/Modules/ /Applications/JUCE/modules/juce_audio_plugin_client/AU";
 				OTHER_LDFLAGS = "-lWebMatrixSynth";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.WebMatrixSynth;
 				PRODUCT_NAME = "WebMatrixSynth";
@@ -1970,6 +1979,7 @@
 					"$(SRCROOT)/../../JuceLibraryCode",
 					"/Applications/JUCE/modules",
 					"$(SRCROOT)/./Source/",
+					"$(SRCROOT)/./Source/Modules/",
 					"/Applications/JUCE/modules/juce_audio_plugin_client/AU",
 					"$(inherited)",
 				);
@@ -1978,7 +1988,7 @@
 				INSTALL_PATH = "$(HOME)/Library/Audio/Plug-Ins/VST3/";
 				LIBRARY_STYLE = Bundle;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules $(SRCROOT)/./Source/ /Applications/JUCE/modules/juce_audio_plugin_client/AU";
+				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules $(SRCROOT)/./Source/ $(SRCROOT)/./Source/Modules/ /Applications/JUCE/modules/juce_audio_plugin_client/AU";
 				OTHER_LDFLAGS = "-bundle -lWebMatrixSynth";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.WebMatrixSynth;
 				PRODUCT_NAME = "WebMatrixSynth";

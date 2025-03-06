@@ -12,22 +12,23 @@
 #include "PluginProcessor.h"
 #include "TextComponent.h"
 #include "Modules/OSC/OSCComponent.h"
+#include "Modules/BaseComponent.h"
 
 
 //==============================================================================
 /**
 */
-class WebMatrixSynthAudioProcessorEditor  : public juce::AudioProcessorEditor
+class PluginEditor  : public juce::AudioProcessorEditor
 {
 public:
-    WebMatrixSynthAudioProcessorEditor (WebMatrixSynthAudioProcessor&);
-    ~WebMatrixSynthAudioProcessorEditor() override;
+    PluginEditor (WebMatrixSynthAudioProcessor&);
+    ~PluginEditor() override;
 
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
     
-    void updateButtons();
+    void updateButtons(int buttonIndex, juce::String updateTo);
     void updateOutputBoxes(std::string, int);
 
 private:
@@ -58,8 +59,8 @@ private:
     juce::ComboBox* outputBoxes[4] = {
         &outputBox1, &outputBox2, &outputBox3, &outputBox4
     };
-    
-    OSCComponent vcoComponent;
+    std::unique_ptr<OSCComponent> vcoComponent;
+//    OSCComponent vcoComponent;
 
     juce::TextButton myButton;
     juce::Rectangle<int> topArea1;
@@ -69,7 +70,10 @@ private:
     juce::String selectedModules[4] = {"", "", "", ""};
     
     
-    std::vector<std::unique_ptr<juce::TextButton>> moduleButtons;
+//    std::vector<std::unique_ptr<juce::TextButton>> moduleButtons;
+    
+    std::unique_ptr<juce::TextButton> moduleButtons[4];
+
     
 
     juce::Label outputText;
@@ -78,12 +82,17 @@ private:
 
     std::unique_ptr<TextComponent> myTextComponent;
     
-    std::vector<std::unique_ptr<juce::Component>> moduleComponents;
+    
+    
+    std::unique_ptr<BaseComponent> moduleComponents[4];
+
+    
+    
     juce::Rectangle<int> window;
     
     WebMatrixSynthAudioProcessor& audioProcessor;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WebMatrixSynthAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginEditor)
 };
 
 
