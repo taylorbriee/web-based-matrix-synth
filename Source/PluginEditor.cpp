@@ -72,7 +72,6 @@ PluginEditor::PluginEditor (WebMatrixSynthAudioProcessor& p)
     
     
     inputBox1.onChange = [this]() {
-        selectedModules[0] = inputBox1.getText();
         updateButtons(0, inputBox1.getText());
         
         DBG("Box1 selected text: " + inputBox1.getText());
@@ -82,7 +81,6 @@ PluginEditor::PluginEditor (WebMatrixSynthAudioProcessor& p)
     };
     
     inputBox2.onChange = [this]() {
-        selectedModules[1] = inputBox2.getText();
         updateButtons(1, inputBox2.getText());
         
         DBG("Box2 selected text: " + inputBox2.getText());
@@ -92,7 +90,6 @@ PluginEditor::PluginEditor (WebMatrixSynthAudioProcessor& p)
     };
     
     inputBox3.onChange = [this]() {
-        selectedModules[2] = inputBox3.getText();
         updateButtons(2, inputBox3.getText());
         
         DBG("Box3 selected text: " + inputBox3.getText());
@@ -103,7 +100,6 @@ PluginEditor::PluginEditor (WebMatrixSynthAudioProcessor& p)
     };
     
     inputBox4.onChange = [this]() {
-        selectedModules[3] = inputBox4.getText();
         updateButtons(3, inputBox4.getText());
         
         DBG("Box4 selected text: " + inputBox4.getText());
@@ -116,10 +112,24 @@ PluginEditor::PluginEditor (WebMatrixSynthAudioProcessor& p)
 
 
     
+    vcoCounter=0;
+    lfoCounter=0;
 
     
+    int padding = 5;
 
     smallerBox = window.reduced(10); // Smaller margins
+    
+    buttonWidth = smallerBox.getWidth()/10;
+    buttonHeight = smallerBox.reduced(padding).getHeight();
+    buttonY = smallerBox.reduced(padding).getY();
+    buttonX = smallerBox.reduced(5).getX();
+    
+    firstButton=true;
+
+
+    
+    
     repaint();
 
 }
@@ -128,96 +138,114 @@ PluginEditor::PluginEditor (WebMatrixSynthAudioProcessor& p)
 void PluginEditor::updateButtons(int index, juce::String updateTo)
 {
 
-    
-    // Counters for numbering each module
-    int vcoCounter = 1, lfoCounter = 1;
-    
-    int padding = 5;
-
-    
-    int buttonWidth = smallerBox.getWidth()/10;
-    int buttonHeight = smallerBox.reduced(padding).getHeight();
-    int buttonX  = smallerBox.reduced(padding).getX();
-    int buttonY = smallerBox.reduced(padding).getY();
-    
-    for (auto* box : outputBoxes)
-    {
-        box->clear();
-    }
-    
-    int outputBoxItemID=1;
-
-    for (auto* box : outputBoxes)
-    {
-        box->addItem(" ", outputBoxItemID++);
-        box->addItem("Main Output", outputBoxItemID++);
-
-    }
-    
-// Create new buttons based on selectedModules
+    //this is incorrectly being triggered.
+    juce::String oldModule = selectedModules[index];
+    if (oldModule != updateTo){
+        
+        if (oldModule == "LFO"){
+            lfoCounter--;
+        }else if (oldModule == "VCO"){
+            vcoCounter--;
+        }
+        // Counters for numbering each module
 
         
-    juce::String module = selectedModules[index];
-
-    if (module == "VCO")
-    {
+        for (auto* box : outputBoxes)
+        {
+            box->clear();
+        }
         
-        moduleComponents[index] = std::make_unique<OSCComponent>();
-        
-        newButton = std::make_unique<juce::TextButton>("VCO " + juce::String(vcoCounter++));
-        
-        //HERE
-        newButton->onClick = [this, index]() {
-//                this->setVisible(false);
-
-            addAndMakeVisible(*moduleComponents[index]);
-            moduleComponents[index]->setBounds(getLocalBounds());
-            
-            
-        };
-
+        int outputBoxItemID=1;
 
         for (auto* box : outputBoxes)
         {
-            box->addSectionHeading("VCO "+ std::to_string(vcoCounter));
-
-            box->addItem("Frequency", outputBoxItemID++);
-            box->addItem("Pulse Width", outputBoxItemID++);
+            box->addItem(" ", outputBoxItemID++);
+            box->addItem("Main Output", outputBoxItemID++);
 
         }
         
-    }
-    else if (module == "LFO")
-    {
-        for (auto* box : outputBoxes)
+    // Create new buttons based on selectedModules
+
+            
+
+        if (updateTo == "VCO")
         {
-            box->addSectionHeading("LFO "+ std::to_string(vcoCounter));
+            
+            moduleComponents[index] = std::make_unique<OSCComponent>();
+            
+            newButton = std::make_unique<juce::TextButton>("VCO " + juce::String(++vcoCounter));
+            
+            newButton->onClick = [this, index]() {
 
-            box->addItem("Frequency", outputBoxItemID++);
-            box->addItem("Pulse Width", outputBoxItemID++);
+                addAndMakeVisible(*moduleComponents[index]);
+                moduleComponents[index]->setBounds(getLocalBounds());
+                
+                
+            };
 
+
+            for (auto* box : outputBoxes)
+            {
+                box->addSectionHeading("VCO "+ std::to_string(vcoCounter));
+
+                box->addItem("Frequency", outputBoxItemID++);
+                box->addItem("Pulse Width", outputBoxItemID++);
+
+            }
+            
         }
-        newButton = std::make_unique<juce::TextButton>("LFO " + juce::String(lfoCounter++));
+        else if (updateTo == "LFO")
+        {
+            
+            for (auto* box : outputBoxes)
+            {
+                box->addSectionHeading("LFO "+ std::to_string(lfoCounter));
+
+                box->addItem("Frequency", outputBoxItemID++);
+                box->addItem("Pulse Width", outputBoxItemID++);
+
+            }
+            newButton = std::make_unique<juce::TextButton>("LFO " + juce::String(++lfoCounter));
+        }
+
+        if (newButton != nullptr)
+        {
+            
+            addAndMakeVisible(*newButton);
+            
+                        
+            moduleButtons[index].reset();
+            moduleButtons[index]= std::move(newButton);
+            
+
+        }else{
+            //reorders buttons when one is removed.
+            moduleButtons[index].reset();
+            
+            
+        }
+        
+        firstButton=true;
+        buttonX = smallerBox.reduced(5).getX();
+        
+        for (int i = 0; i < 4; ++i)
+        {
+            if (moduleButtons[i]) // Check if the pointer is valid
+            {
+                if (firstButton){
+                    moduleButtons[i]->setBounds(buttonX, buttonY, buttonWidth, buttonHeight);
+                    firstButton=false;
+                }else{
+                    moduleButtons[i]->setBounds(buttonX+=65, buttonY, buttonWidth, buttonHeight);
+                }
+            }
+        }
+        
+
+        // Update layout
+        resized();
+        repaint();
     }
-
-    if (newButton != nullptr)
-    {
-        
-        addAndMakeVisible(*newButton);
-        
-        newButton->setBounds(buttonX, buttonY, buttonWidth, buttonHeight);
-        
-        buttonX+=65;
-        
-        moduleButtons[index].reset();
-        moduleButtons[index]= std::move(newButton);
-
-    }
-    
-
-    // Update layout
-    resized();
-    repaint();
 }
 
 

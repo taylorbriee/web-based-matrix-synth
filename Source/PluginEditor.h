@@ -67,6 +67,16 @@ private:
     juce::Rectangle<int> smallerBox;
     
     
+    int buttonWidth;
+    int buttonHeight;
+    int buttonX;
+    int buttonY;
+    
+    int vcoCounter, lfoCounter;
+
+    
+    
+    
     juce::String selectedModules[4] = {"", "", "", ""};
     
     
@@ -86,7 +96,7 @@ private:
     
     std::unique_ptr<BaseComponent> moduleComponents[4];
 
-    
+    bool firstButton;
     
     juce::Rectangle<int> window;
     
