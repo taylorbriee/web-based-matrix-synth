@@ -96,9 +96,11 @@ void OSCComponent::resized()
     auto windowBottomHalf = window;
     
     
-    auto bottomSeg1 = windowBottomHalf.removeFromTop(windowBottomHalf.getHeight() / 3);
-    auto bottomSeg2 = windowBottomHalf.removeFromTop(windowBottomHalf.getHeight() / 2);
-    auto bottomSeg3 = windowBottomHalf;
+    auto bottomSeg1 = windowBottomHalf.removeFromTop(windowBottomHalf.getHeight() / 4);
+    auto bottomSeg2 = windowBottomHalf.removeFromTop(windowBottomHalf.getHeight() / 3);
+    auto bottomSeg3 = windowBottomHalf.removeFromTop(windowBottomHalf.getHeight() / 2);
+
+    auto bottomSeg4 = windowBottomHalf;
     
     addAndMakeVisible(waveTypeBox);
     waveTypeBox.addItem("Sine", 1);
@@ -115,10 +117,17 @@ void OSCComponent::resized()
     inputModeBox.setSelectedId(1);
     
     inputModeBox.setBounds(bottomSeg2);
+    
+    addAndMakeVisible(oscVoices);
+    oscVoices.addItem("Monophonic", 1);
+    oscVoices.addItem("Polyphonic", 2);
+    oscVoices.setSelectedId(1);
+    oscVoices.setBounds(bottomSeg3);
+
 
     addAndMakeVisible(backButton);
     backButton.setButtonText("Back");
-    backButton.setBounds(bottomSeg3);
+    backButton.setBounds(bottomSeg4);
     
     backButton.onClick = [this]() {
         this->setVisible(false);

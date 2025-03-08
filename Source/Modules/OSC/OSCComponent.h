@@ -30,7 +30,7 @@ public:
     
 private:
     juce::Slider pulseWidthDial, freqDial;
-    juce::ComboBox inputModeBox, waveTypeBox;
+    juce::ComboBox inputModeBox, waveTypeBox, oscVoices;
     
     juce::TextButton backButton;
     
