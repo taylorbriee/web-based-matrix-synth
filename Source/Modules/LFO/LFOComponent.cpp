@@ -88,6 +88,7 @@ void LFOComponent::resized()
     
     
     
+    
     pulseWidthDial.setSliderStyle(juce::Slider::Rotary);
     pulseWidthDial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 20);
     pulseWidthDial.setBounds(topRightArea);
