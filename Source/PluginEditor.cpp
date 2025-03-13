@@ -186,6 +186,8 @@ void PluginEditor::updateButtons(int index, juce::String updateTo)
 
             for (auto* box : outputBoxes)
             {
+                moduleComponents[index] = std::make_unique<OSCComponent>();
+
                 box->addSectionHeading("VCO "+ std::to_string(vcoCounter));
 
                 box->addItem("Frequency", outputBoxItemID++);
@@ -197,15 +199,30 @@ void PluginEditor::updateButtons(int index, juce::String updateTo)
         else if (updateTo == "LFO")
         {
             
+            moduleComponents[index] = std::make_unique<LFOComponent>();
+            
+            newButton = std::make_unique<juce::TextButton>("LFO " + juce::String(++lfoCounter));
+
+            
+            newButton->onClick = [this, index]() {
+                
+                addAndMakeVisible(*moduleComponents[index]);
+                moduleComponents[index]->setBounds(getLocalBounds());
+                
+            };
+            
+            
+            
             for (auto* box : outputBoxes)
             {
+                moduleComponents[index] = std::make_unique<LFOComponent>();
+
                 box->addSectionHeading("LFO "+ std::to_string(lfoCounter));
 
                 box->addItem("Frequency", outputBoxItemID++);
                 box->addItem("Pulse Width", outputBoxItemID++);
 
             }
-            newButton = std::make_unique<juce::TextButton>("LFO " + juce::String(++lfoCounter));
         }
 
         if (newButton != nullptr)

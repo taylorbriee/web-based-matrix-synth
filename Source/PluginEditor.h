@@ -12,6 +12,8 @@
 #include "PluginProcessor.h"
 #include "TextComponent.h"
 #include "Modules/OSC/OSCComponent.h"
+#include "Modules/LFO/LFOComponent.h"
+
 #include "Modules/BaseComponent.h"
 
 
