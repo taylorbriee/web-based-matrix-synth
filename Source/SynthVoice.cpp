@@ -40,7 +40,9 @@ void SynthVoice::pitchWheelMoved (int newPitchWheelValue)
 
 void SynthVoice::prepareToPlay (double sampleRate, int samplesPerBlock, int outputChannels)
 {
-    adsr.setSampleRate(sampleRate); 
+
+
+    adsr.setSampleRate(sampleRate);
     
     
     juce::dsp::ProcessSpec spec;
@@ -48,7 +50,8 @@ void SynthVoice::prepareToPlay (double sampleRate, int samplesPerBlock, int outp
     spec.sampleRate = sampleRate;
     spec.numChannels = outputChannels;
       
-    gain.prepare (spec);
+    gain.prepare(spec);
+    osc.prepare(spec);
     
     osc.setFrequency (220.0f);
     gain.setGainLinear (0.01f);
@@ -64,7 +67,7 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int 
     juce::dsp::AudioBlock<float> audioBlock { outputBuffer };
     
     //line below is causing apple audio thread issues
-    //osc.process (juce::dsp::ProcessContextReplacing<float> (audioBlock));
+    osc.process (juce::dsp::ProcessContextReplacing<float> (audioBlock));
     gain.process (juce::dsp::ProcessContextReplacing<float> (audioBlock));
     adsr.applyEnvelopeToBuffer(outputBuffer, startSample,  numSamples);
     

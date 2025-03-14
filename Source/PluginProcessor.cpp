@@ -95,6 +95,8 @@ void WebMatrixSynthAudioProcessor::changeProgramName (int index, const juce::Str
 //==============================================================================
 void WebMatrixSynthAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+
+
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
     
@@ -104,7 +106,7 @@ void WebMatrixSynthAudioProcessor::prepareToPlay (double sampleRate, int samples
     {
         if (auto voice = dynamic_cast<SynthVoice*>(synth.getVoice(i)))
         {
-            voice->prepareToPlay (sampleRate, samplesPerBlock, getTotalNumOutputChannels());
+            voice->prepareToPlay(sampleRate, samplesPerBlock, getTotalNumOutputChannels());
         }
     }
 }
@@ -161,7 +163,6 @@ void WebMatrixSynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
         }
     }
     
-
     synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {

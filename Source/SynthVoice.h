@@ -27,10 +27,11 @@ class SynthVoice : public juce::SynthesiserVoice
     
     private:
     
+    
     juce::ADSR adsr;
     juce::ADSR::Parameters adsrParams;
     
-    juce::dsp::Oscillator<float> osc { [](float x) { return x < 0.0f ? -1.0f : 1.0f; }, 200 };
+    juce::dsp::Oscillator<float> osc { [](float x) { return x < 0.0f ? -1.0f : 1.0f; }, 0 };
     juce::dsp::Gain<float> gain;
     
     bool isPrepared{false};
