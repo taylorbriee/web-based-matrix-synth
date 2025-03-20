@@ -74,7 +74,7 @@ PluginEditor::PluginEditor (WebMatrixSynthAudioProcessor& p)
     inputBox1.onChange = [this]() {
         updateButtons(0, inputBox1.getText());
         
-        DBG("Box1 selected text: " + inputBox1.getText());
+//        DBG("Box1 selected text: " + inputBox1.getText());
         for (int i = 0; i < 4; i++) {
             std::cout << selectedModules[i] << std::endl;
         }
@@ -83,7 +83,7 @@ PluginEditor::PluginEditor (WebMatrixSynthAudioProcessor& p)
     inputBox2.onChange = [this]() {
         updateButtons(1, inputBox2.getText());
         
-        DBG("Box2 selected text: " + inputBox2.getText());
+//        DBG("Box2 selected text: " + inputBox2.getText());
         for (int i = 0; i < 4; i++) {
             std::cout << selectedModules[i] << std::endl;
         }
@@ -92,7 +92,7 @@ PluginEditor::PluginEditor (WebMatrixSynthAudioProcessor& p)
     inputBox3.onChange = [this]() {
         updateButtons(2, inputBox3.getText());
         
-        DBG("Box3 selected text: " + inputBox3.getText());
+//        DBG("Box3 selected text: " + inputBox3.getText());
         for (int i = 0; i < 4; i++) {
             std::cout << selectedModules[i] << std::endl;
         }
@@ -102,7 +102,7 @@ PluginEditor::PluginEditor (WebMatrixSynthAudioProcessor& p)
     inputBox4.onChange = [this]() {
         updateButtons(3, inputBox4.getText());
         
-        DBG("Box4 selected text: " + inputBox4.getText());
+//        DBG("Box4 selected text: " + inputBox4.getText());
         for (int i = 0; i < 4; i++) {
             std::cout << selectedModules[i] << std::endl;
         }
@@ -172,6 +172,8 @@ void PluginEditor::updateButtons(int index, juce::String updateTo)
         {
             
             moduleComponents[index] = std::make_unique<OSCComponent>();
+            //possibly create a new array storing strings of chosen modules
+
             
             newButton = std::make_unique<juce::TextButton>("VCO " + juce::String(++vcoCounter));
             
@@ -353,7 +355,6 @@ void PluginEditor::resized()
  
     window = getLocalBounds();
     
-    
     topArea1 = window.removeFromTop(window.getHeight() * 0.70);
     
     auto gridArea = topArea1.removeFromBottom(topArea1.getHeight() * 0.95);
@@ -361,11 +362,6 @@ void PluginEditor::resized()
     grid.performLayout(gridArea);
     
 
-    
-
-
-
-    
     repaint();
 
 }

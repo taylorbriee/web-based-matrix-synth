@@ -17,7 +17,7 @@ OSCComponent::OSCComponent()
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
-    DBG("OSCComponent Constructor Called");
+//    DBG("OSCComponent Constructor Called");
 
 }
 
