@@ -12,18 +12,22 @@
 //==============================================================================
 WebMatrixSynthAudioProcessor::WebMatrixSynthAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
-     : AudioProcessor (BusesProperties()
-                     #if ! JucePlugin_IsMidiEffect
-                      #if ! JucePlugin_IsSynth
-                       .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
+    : AudioProcessor (BusesProperties()
+                     #if !JucePlugin_IsMidiEffect
+                      #if !JucePlugin_IsSynth
+                       .withInput  ("Input", juce::AudioChannelSet::stereo(), true)
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        )
 #endif
+    , apvts(*this, nullptr, "Parameters", createParams())
 {
     synth.addSound (new SynthSound());
-    synth.addVoice (new SynthVoice());
+//    synth.addVoice (new SynthVoice());
+    
+    for (int i = 0; i < 8; ++i) // 8 voices
+        synth.addVoice(new SynthVoice());
 }
 
 WebMatrixSynthAudioProcessor::~WebMatrixSynthAudioProcessor()
@@ -99,7 +103,6 @@ void WebMatrixSynthAudioProcessor::prepareToPlay (double sampleRate, int samples
 
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
-    
     synth.setCurrentPlaybackSampleRate(sampleRate);
     
     for (int i = 0; i < synth.getNumVoices(); i++)
@@ -145,6 +148,7 @@ bool WebMatrixSynthAudioProcessor::isBusesLayoutSupported (const BusesLayout& la
 
 void WebMatrixSynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
+
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
@@ -157,6 +161,21 @@ void WebMatrixSynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     //original issue here with increment post fix
     for (int i=0; i<synth.getNumSounds(); ++i){
         if (auto voice = dynamic_cast<juce::SynthesiserVoice* >(synth.getVoice(i))){
+            // Osc controls
+            // ADSR
+            // LFO
+            
+            
+            
+            
+            //psudocode
+            
+            //loop through all the modules getting their name i.e. (OSC 1, VCO 2)
+            //get modules here 
+            
+//            if (module == "osc"){
+//                apvts.get
+//            }
             
             
             
@@ -202,4 +221,92 @@ void WebMatrixSynthAudioProcessor::setStateInformation (const void* data, int si
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new WebMatrixSynthAudioProcessor();
+}
+
+
+juce::AudioProcessorValueTreeState::ParameterLayout WebMatrixSynthAudioProcessor::createParams()
+{
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
+    
+    
+    //LFO:
+    
+    //Frequency
+    //Pulse Width
+    //Sine, Saw, Square, Noise
+
+    
+    juce::String paramID;
+//
+//    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("paramID", 1), " VCO Frequency", juce::NormalisableRange<float> { 0.0f, 1000.0f, 0.01f }, 0.0f, "Hz"));
+    
+//    params.push_back(std::make_unique<juce::AudioParameterChoice> (juce::ParameterID(paramID, 1), " VCO Waveform", juce::StringArray {"Sine","Saw","Square","Noise"}, 0));
+
+    
+    for(int i=1; i<5; i++){
+        
+        //VCO:
+        //Frequency
+        //Pulse Width
+        //Sine, Saw, Square, Noise
+        //inc MIDI, Drone
+        //monophonic, polyphonic
+        
+        juce::String slot = "Slot" + juce::String(i);
+
+        //VCO:
+
+        paramID = slot+"_VCO_"+"Freq";
+        
+        params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" VCO Frequency", juce::NormalisableRange<float> { 0.0f, 1000.0f, 0.01f }, 0.0f, "Hz"));
+        
+        
+        paramID = slot+"_VCO_"+"PW";
+        
+        params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" VCO Pulse Width", juce::NormalisableRange<float> { 0.0f, 100.0f, 0.01f }, 0.0f, "%"));
+        
+        
+        paramID = slot+"_VCO_"+"WF";
+        
+        params.push_back(std::make_unique<juce::AudioParameterChoice> (juce::ParameterID(paramID, 1), slot+" VCO Waveform", juce::StringArray {"Sine","Saw","Square","Noise"}, 0));
+        
+        
+        paramID = slot+"_VCO_"+"Inputs";
+        
+        params.push_back(std::make_unique<juce::AudioParameterChoice> (juce::ParameterID(paramID, 1), slot+" VCO Inputs", juce::StringArray {"inc MIDI", "Drone"}, 0));
+        
+        
+        paramID = slot+"_VCO_"+"VM";
+        
+        params.push_back(std::make_unique<juce::AudioParameterChoice> (juce::ParameterID(paramID, 1), slot+" VCO Voice Mode", juce::StringArray {"monophonic", "polyphonic"}, 0));
+        
+        
+        
+        
+        
+        
+        //LFO:
+        paramID = slot+"_LFO_"+"Freq";
+        
+        params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" LFO Frequency", juce::NormalisableRange<float> { 0.0f, 1000.0f, 0.01f }, 0.0f, "Hz"));
+        
+        
+        paramID = slot+"_LFO_"+"PW";
+        
+        params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" LFO Pulse Width", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.01f }, 0.0f, "%"));
+        
+        
+        paramID = slot+"_LFO_"+"WF";
+        
+        params.push_back(std::make_unique<juce::AudioParameterChoice> (juce::ParameterID(paramID, 1), slot+" LFO Waveform", juce::StringArray {"Sine","Saw","Square","Noise"}, 0));
+
+        
+        //Slot1_VCO_Freq
+    
+        
+    }
+    
+    
+    
+    return { params.begin(), params.end() };
 }

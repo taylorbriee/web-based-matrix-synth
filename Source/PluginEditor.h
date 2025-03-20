@@ -46,6 +46,8 @@ private:
     
     juce::ComboBox inputBox1, inputBox2, inputBox3, inputBox4, outputBox1, outputBox2, outputBox3, outputBox4;
     
+    std::unordered_map<juce::String, std::unordered_map<juce::String, std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>>> sliderAttachments;
+    
     juce::Slider* dials[20] = {
         &dial1, &dial2, &dial3, &dial4,
         &dial5, &dial6, &dial7, &dial8,

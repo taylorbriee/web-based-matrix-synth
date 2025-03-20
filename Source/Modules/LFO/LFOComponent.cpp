@@ -20,7 +20,7 @@ LFOComponent::LFOComponent()
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
-    DBG("LFOComponent Constructor Called");
+//    DBG("LFOComponent Constructor Called");
 
 }
 
