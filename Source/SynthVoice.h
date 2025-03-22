@@ -24,6 +24,8 @@ class SynthVoice : public juce::SynthesiserVoice
     void pitchWheelMoved (int newPitchWheelValue) override;
     void prepareToPlay (double sampleRate, int samplesPerBlock, int outputChannels);
     void renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int startSample, int numSamples) override;
+    void paramUpdateVoice(const float freq);
+
     
     private:
     

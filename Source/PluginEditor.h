@@ -64,7 +64,20 @@ private:
         &outputBox1, &outputBox2, &outputBox3, &outputBox4
     };
     std::unique_ptr<OSCComponent> vcoComponent;
-//    OSCComponent vcoComponent;
+    
+    WebMatrixSynthAudioProcessor& audioProcessor;
+
+    
+    using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+//    Slot1_VCO_Freq
+    
+    std::unique_ptr<SliderAttachment> Slot1_VCO_Freq;
+    std::unique_ptr<SliderAttachment> Slot1_VCO_PW;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> Slot1_VCO_WF;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> Slot1_VCO_Inputs;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> Slot1_VCO_VM;
+
+    
 
     juce::TextButton myButton;
     juce::Rectangle<int> topArea1;
@@ -88,7 +101,7 @@ private:
     
     std::unique_ptr<juce::TextButton> moduleButtons[4];
 
-    
+    juce::AudioProcessorValueTreeState& apvts;
 
     juce::Label outputText;
 
@@ -104,7 +117,6 @@ private:
     
     juce::Rectangle<int> window;
     
-    WebMatrixSynthAudioProcessor& audioProcessor;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginEditor)
 };

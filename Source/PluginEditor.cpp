@@ -18,11 +18,17 @@
 
 //==============================================================================
 PluginEditor::PluginEditor (WebMatrixSynthAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+    : AudioProcessorEditor (p), audioProcessor (p), apvts(audioProcessor.apvts)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize (600, 400);
+    
+//    apvts = audioProcessor.apvts;
+
+    
+
+    
     
     dial1.setSliderStyle(juce::Slider::Rotary);
     
@@ -128,8 +134,6 @@ PluginEditor::PluginEditor (WebMatrixSynthAudioProcessor& p)
     firstButton=true;
 
 
-    
-    
     repaint();
 
 }
@@ -138,7 +142,6 @@ PluginEditor::PluginEditor (WebMatrixSynthAudioProcessor& p)
 void PluginEditor::updateButtons(int index, juce::String updateTo)
 {
 
-    //this is incorrectly being triggered.
     juce::String oldModule = selectedModules[index];
     if (oldModule != updateTo){
         
@@ -166,16 +169,68 @@ void PluginEditor::updateButtons(int index, juce::String updateTo)
         
     // Create new buttons based on selectedModules
 
-            
-
         if (updateTo == "VCO")
         {
+
             
-            moduleComponents[index] = std::make_unique<OSCComponent>();
+//            juce::Slider pulseWidthDial, freqDial;
+//            juce::ComboBox inputModeBox, waveTypeBox, oscVoices;
+//            do all parameter creation here
+//            
+//            
+//            
+//                Slot1_VCO_Freq
+//                Slot1_VCO_PW
+//                Slot1_VCO_WF
+//                Slot1_VCO_Inputs
+//                Slot1_VCO_VM
+                
+
+            
+            moduleComponents[index] = std::make_unique<OSCComponent>(apvts, juce::String("Slot1"));
+            if (auto* oscComponent = dynamic_cast<OSCComponent*>(moduleComponents[index].get()))
+            {
+                 
+//                juce::String paramID = "Slot"+juce::String(index+1)+"_VCO_Freq";
+//                Slot1_VCO_Freq = std::make_unique<SliderAttachment>(audioProcessor.apvts, paramID, oscComponent->freqDial);
+
+                
+//                juce::String paramID = "Slot"+juce::String(index+1)+"_VCO_PW";
+//                Slot1_VCO_Freq = std::make_unique<SliderAttachment>(audioProcessor.apvts, paramID, oscComponent->freqDial);
+//                
+//                
+//                
+//                oscSelAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(audioProcessor.apvts, "OSC", oscSelector);
+
+
+                
+                
+//                
+//                oscComponent->pulseWidthDial;
+//                oscComponent->inputModeBox;
+//                oscComponent->waveTypeBox;
+//                oscComponent->oscVoices;
+            }
+            else
+            {
+                DBG("Failed to cast to OSCComponent");
+            }
+            
+            
+            
+
+                
+            
+            
+            
+            
+        
             //possibly create a new array storing strings of chosen modules
 
             
-            newButton = std::make_unique<juce::TextButton>("VCO " + juce::String(++vcoCounter));
+//            newButton = std::make_unique<juce::TextButton>("VCO " + juce::String(++vcoCounter));
+            newButton = std::make_unique<juce::TextButton>("VCO Slot: " + juce::String(index+1));
+
             
             newButton->onClick = [this, index]() {
 
@@ -188,22 +243,23 @@ void PluginEditor::updateButtons(int index, juce::String updateTo)
 
             for (auto* box : outputBoxes)
             {
-                moduleComponents[index] = std::make_unique<OSCComponent>();
-
                 box->addSectionHeading("VCO "+ std::to_string(vcoCounter));
 
                 box->addItem("Frequency", outputBoxItemID++);
                 box->addItem("Pulse Width", outputBoxItemID++);
 
             }
-            
         }
+        
         else if (updateTo == "LFO")
         {
             
-            moduleComponents[index] = std::make_unique<LFOComponent>();
             
-            newButton = std::make_unique<juce::TextButton>("LFO " + juce::String(++lfoCounter));
+            moduleComponents[index] = std::make_unique<LFOComponent>(apvts, juce::String("Slot1"));
+            
+//            newButton = std::make_unique<juce::TextButton>("LFO " + juce::String(++lfoCounter));
+            newButton = std::make_unique<juce::TextButton>("LFO Slot: " + juce::String(index+1));
+
 
             
             newButton->onClick = [this, index]() {
@@ -217,8 +273,7 @@ void PluginEditor::updateButtons(int index, juce::String updateTo)
             
             for (auto* box : outputBoxes)
             {
-                moduleComponents[index] = std::make_unique<LFOComponent>();
-
+                
                 box->addSectionHeading("LFO "+ std::to_string(lfoCounter));
 
                 box->addItem("Frequency", outputBoxItemID++);

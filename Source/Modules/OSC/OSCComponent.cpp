@@ -13,12 +13,11 @@
 
 
 //==============================================================================
-OSCComponent::OSCComponent()
+OSCComponent::OSCComponent(juce::AudioProcessorValueTreeState& apvts, juce::String slot)
+: apvts(apvts), slot(slot)
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
-//    DBG("OSCComponent Constructor Called");
 
+    DBG("");
 }
 
 OSCComponent::~OSCComponent()
@@ -55,8 +54,6 @@ void OSCComponent::resized()
     addAndMakeVisible(freqDial);
     addAndMakeVisible(pulseWidthDial);
     
-    
-    
 
     
     auto topLeftArea = window.removeFromTop(window.getHeight() * 0.5);
@@ -91,7 +88,19 @@ void OSCComponent::resized()
     
     pulseWidthDial.setTextValueSuffix(" %");
     pulseWidthDial.setRange(0.1, 10.0, 0.1);
+    
+    using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
 
+//    juce::String paramID = slot+"_VCO_Freq";
+    juce::String paramID = "Slot1_VCO_Freq";
+    if (apvts.getParameter(paramID) != nullptr)
+    {
+        auto Slot1_VCO_Freq = std::make_unique<SliderAttachment>(apvts, paramID, freqDial);
+    }
+    else
+    {
+        DBG("Error: Parameter not found.");
+    }
     
     auto windowBottomHalf = window;
     

@@ -19,7 +19,7 @@
 class OSCComponent : public BaseComponent
 {
 public:
-    OSCComponent();
+    OSCComponent(juce::AudioProcessorValueTreeState& apvts, juce::String slot);
     ~OSCComponent() override;
 
     void paint (juce::Graphics&) override;
@@ -28,13 +28,17 @@ public:
     void loadState() override;
     void saveState() override;
     
-private:
     juce::Slider pulseWidthDial, freqDial;
     juce::ComboBox inputModeBox, waveTypeBox, oscVoices;
     
-    juce::TextButton backButton;
+private:
+
+    juce::String slot;
+    juce::AudioProcessorValueTreeState& apvts;
     
     juce::Label freqLabel, pulseWidthLabel;
+    
+    juce::TextButton backButton;
     
     juce::Rectangle<int> window, titleArea;
     

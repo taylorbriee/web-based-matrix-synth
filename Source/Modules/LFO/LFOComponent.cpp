@@ -16,11 +16,10 @@
 
 
 //==============================================================================
-LFOComponent::LFOComponent()
+LFOComponent::LFOComponent(juce::AudioProcessorValueTreeState& apvts, juce::String slot)
+    : apvts(apvts), slot(slot)
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
-//    DBG("LFOComponent Constructor Called");
+
 
 }
 
@@ -51,13 +50,13 @@ void LFOComponent::paint (juce::Graphics& g)
 void LFOComponent::resized()
 {
     
+
     window = getLocalBounds();
     
     titleArea = window.removeFromTop(60);
     
     addAndMakeVisible(freqDial);
     addAndMakeVisible(pulseWidthDial);
-    
     
     
 
@@ -85,6 +84,13 @@ void LFOComponent::resized()
     freqDial.setSkewFactor(0.3);
     freqDial.setTextValueSuffix(" Hz");
     freqDial.setRange(0.0001, 1024, 0.0001);
+    
+    
+    using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+    
+    juce::String paramID = slot+"_VCO_Freq";
+    auto Slot1_VCO_Freq = std::make_unique<SliderAttachment>(apvts, paramID, freqDial);
+    
     
     
     

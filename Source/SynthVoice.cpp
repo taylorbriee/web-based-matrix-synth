@@ -55,10 +55,15 @@ void SynthVoice::prepareToPlay (double sampleRate, int samplesPerBlock, int outp
     osc.prepare(spec);
     
     osc.setFrequency (220.0f);
-    gain.setGainLinear (0.5f);
+    gain.setGainLinear (0.3f);
     
     isPrepared = true;
 }
+
+void SynthVoice::paramUpdateVoice(const float freq){
+    osc.setFrequency(freq);
+}
+
 
 void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int startSample, int numSamples)
 {

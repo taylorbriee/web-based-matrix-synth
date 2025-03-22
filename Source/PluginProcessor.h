@@ -63,7 +63,8 @@ public:
 private:
     //==============================================================================
     
-//    juce::String paramID;
+    juce::String paramID;
+    juce::String slot;
     juce::Synthesiser synth;
     juce::AudioProcessorValueTreeState::ParameterLayout createParams();
 
