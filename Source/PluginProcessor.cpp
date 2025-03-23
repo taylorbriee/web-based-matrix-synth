@@ -159,19 +159,14 @@ void WebMatrixSynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
 
 
     //original issue here with increment post fix
-    for (int i=0; i<synth.getNumSounds(); ++i){
+    for (int i=0; i<synth.getNumVoices(); ++i){
         if (auto voice = dynamic_cast<SynthVoice* >(synth.getVoice(i))){
             // Osc controls
-            // ADSR
-            // LFO
             
+            Slot1_VCO_Freq = apvts.getRawParameterValue("Slot1_VCO_Freq")->load();
 
-            auto Slot1_VCO_Freq = apvts.getRawParameterValue("Slot1_VCO_Freq");
-            DBG("Slot1_VCO_Freq: " + juce::String(Slot1_VCO_Freq->load()));
-
-//            voice->paramUpdateVoice(Slot1_VCO_Freq);
-            
-    
+            voice->paramUpdateVoice(Slot1_VCO_Freq);
+                    
         }
     }
     
@@ -242,13 +237,11 @@ juce::AudioProcessorValueTreeState::ParameterLayout WebMatrixSynthAudioProcessor
         
 
         paramID = slot+"_VCO_Freq";
-        
+//        
+//        //WHY DOES PARAM ID MAKE IT OK WTFFFFF
+//        "Slot1_VCO_Freq"
         params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" VCO Frequency", juce::NormalisableRange<float> { 0.0f, 1000.0f, 0.01f }, 0.0f));
 
-        
-        DBG("VCO ID: "+ paramID);
-        
-        
         paramID = slot+"_VCO_PW";
         
         params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" VCO Pulse Width", juce::NormalisableRange<float> { 0.0f, 100.0f, 0.01f }, 0.0f));
@@ -268,14 +261,6 @@ juce::AudioProcessorValueTreeState::ParameterLayout WebMatrixSynthAudioProcessor
         params.push_back(std::make_unique<juce::AudioParameterChoice> (juce::ParameterID(paramID, 1), slot+" VCO Voice Mode", juce::StringArray {"monophonic", "polyphonic"}, 0));
         
         
-        
-        
-        //LFO:
-        
-        //Frequency
-        //Pulse Width
-        //Sine, Saw, Square, Noise
-        
         paramID = slot+"_LFO_Freq";
         
         params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" LFO Frequency", juce::NormalisableRange<float> { 0.0f, 1000.0f, 0.01f }, 0.0f, "Hz"));
@@ -284,7 +269,6 @@ juce::AudioProcessorValueTreeState::ParameterLayout WebMatrixSynthAudioProcessor
         paramID = slot+"_LFO_PW";
         
         params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" LFO Pulse Width", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.01f }, 0.0f, "%"));
-        
         
         paramID = slot+"_LFO_WF";
         

@@ -67,6 +67,7 @@ private:
     juce::String slot;
     juce::Synthesiser synth;
     juce::AudioProcessorValueTreeState::ParameterLayout createParams();
+    float Slot1_VCO_Freq;
 
     
     

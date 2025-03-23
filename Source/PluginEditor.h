@@ -110,7 +110,6 @@ private:
     std::unique_ptr<TextComponent> myTextComponent;
     
     
-    
     std::unique_ptr<BaseComponent> moduleComponents[4];
 
     bool firstButton;

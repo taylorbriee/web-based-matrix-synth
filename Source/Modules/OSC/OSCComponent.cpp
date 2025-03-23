@@ -72,6 +72,13 @@ void OSCComponent::resized()
     
     topLeftDialBounds = topLeftDialBounds;
     
+    pulseWidthDial.setSliderStyle(juce::Slider::Rotary);
+    pulseWidthDial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 20);
+    pulseWidthDial.setBounds(topRightArea);
+    
+    pulseWidthDial.setTextValueSuffix(" %");
+    pulseWidthDial.setRange(0.1, 10.0, 0.1);
+    
     freqDial.setSliderStyle(juce::Slider::Rotary);
     freqDial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 80, 20);
     freqDial.setBounds(topLeftDialBounds);
@@ -80,22 +87,13 @@ void OSCComponent::resized()
     freqDial.setTextValueSuffix(" Hz");
     freqDial.setRange(0.0001, 1024, 0.0001);
     
-    
-    
-    pulseWidthDial.setSliderStyle(juce::Slider::Rotary);
-    pulseWidthDial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 20);
-    pulseWidthDial.setBounds(topRightArea);
-    
-    pulseWidthDial.setTextValueSuffix(" %");
-    pulseWidthDial.setRange(0.1, 10.0, 0.1);
-    
     using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
 
 //    juce::String paramID = slot+"_VCO_Freq";
     juce::String paramID = "Slot1_VCO_Freq";
     if (apvts.getParameter(paramID) != nullptr)
     {
-        auto Slot1_VCO_Freq = std::make_unique<SliderAttachment>(apvts, paramID, freqDial);
+        vcoFreq1Attachment = std::make_unique<SliderAttachment>(apvts, paramID, freqDial);
     }
     else
     {

@@ -43,6 +43,10 @@ private:
     juce::Rectangle<int> window, titleArea;
     
     juce::ValueTree vcoState { "VCO" };
+    
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> vcoFreq1Attachment;
+
+    
 
 
     
