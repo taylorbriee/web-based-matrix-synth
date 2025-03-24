@@ -185,9 +185,8 @@ void PluginEditor::updateButtons(int index, juce::String updateTo)
 //                Slot1_VCO_Inputs
 //                Slot1_VCO_VM
                 
-
             
-            moduleComponents[index] = std::make_unique<OSCComponent>(apvts, juce::String("Slot1"));
+            moduleComponents[index] = std::make_unique<OSCComponent>(apvts, juce::String("Slot"+juce::String(index+1)));
             if (auto* oscComponent = dynamic_cast<OSCComponent*>(moduleComponents[index].get()))
             {
                  

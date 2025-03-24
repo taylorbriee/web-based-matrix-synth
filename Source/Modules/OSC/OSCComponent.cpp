@@ -87,18 +87,7 @@ void OSCComponent::resized()
     freqDial.setTextValueSuffix(" Hz");
     freqDial.setRange(0.0001, 1024, 0.0001);
     
-    using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
 
-//    juce::String paramID = slot+"_VCO_Freq";
-    juce::String paramID = "Slot1_VCO_Freq";
-    if (apvts.getParameter(paramID) != nullptr)
-    {
-        vcoFreq1Attachment = std::make_unique<SliderAttachment>(apvts, paramID, freqDial);
-    }
-    else
-    {
-        DBG("Error: Parameter not found.");
-    }
     
     auto windowBottomHalf = window;
     
@@ -145,7 +134,31 @@ void OSCComponent::resized()
     
     freqLabel.setText("Frequency", juce::dontSendNotification);
     pulseWidthLabel.setText("Pulse Width", juce::dontSendNotification);
+    
+    
+    
+    
+    using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+    
+    using ComboBoxAttachment = juce::AudioProcessorValueTreeState::ComboBoxAttachment;
 
+
+    
+    juce::String WF_Param = slot+"_VCO_WF";
+    juce::String Inputs_Param = slot+"_VCO_Inputs";
+    juce::String VM_Param = slot+"_VCO_VM";
+    WF_Attach = std::make_unique<ComboBoxAttachment>(apvts, WF_Param, waveTypeBox);
+    Inputs_Attach = std::make_unique<ComboBoxAttachment>(apvts, Inputs_Param, inputModeBox);
+    VM_Attach = std::make_unique<ComboBoxAttachment>(apvts, VM_Param, oscVoices);
+    
+    
+    
+    juce::String Freq_Param = slot+"_VCO_Freq";
+    juce::String PW_Param = slot+"_VCO_PW";
+    Freq_Attach = std::make_unique<SliderAttachment>(apvts, Freq_Param, freqDial);
+    PW_Attach = std::make_unique<SliderAttachment>(apvts, PW_Param, freqDial);
+    
+    
  
 }
 

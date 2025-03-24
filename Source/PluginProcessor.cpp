@@ -24,10 +24,12 @@ WebMatrixSynthAudioProcessor::WebMatrixSynthAudioProcessor()
     , apvts(*this, nullptr, "Parameters", createParams())
 {
     synth.addSound (new SynthSound());
-//    synth.addVoice (new SynthVoice());
+    synth.addVoice(new SynthVoice());
+
     
-    for (int i = 0; i < 8; ++i) // 8 voices
-        synth.addVoice(new SynthVoice());
+//    for (int i = 0; i < 8; ++i){
+//
+//    } // 8 voices
 }
 
 WebMatrixSynthAudioProcessor::~WebMatrixSynthAudioProcessor()
@@ -146,6 +148,11 @@ bool WebMatrixSynthAudioProcessor::isBusesLayoutSupported (const BusesLayout& la
 }
 #endif
 
+
+//void WebMatrixSynthAudioProcessor::processBlock(){
+//    
+//}
+
 void WebMatrixSynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
 
@@ -161,11 +168,50 @@ void WebMatrixSynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     //original issue here with increment post fix
     for (int i=0; i<synth.getNumVoices(); ++i){
         if (auto voice = dynamic_cast<SynthVoice* >(synth.getVoice(i))){
+            
+            
+            //for loop for slots
+            
+            //check type of module in that index in moduleComponents
+            
+            //update all parameters for that module type
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             // Osc controls
             
+            
+            //itterate through model components calling the corripsonding method either for vco or lfo that updates the corrisponding varaibles.
+            
+            
+            
+            //created a nested disctionary, has 4 main slots, looks in module components and updates if vco or lfo is in each slots.
+            //under lfo or vco are the parameters for said lfo or vco.
+            
+            
+            
+            //we call a function with the slot number (corrisponds to the index) and depending on the module in moduleComponents
+            //we instatiate a vco or lfo and make the parameter calls to update the attributes in that slot positions
+            //on the outside we have a loop that is calling
+            
             Slot1_VCO_Freq = apvts.getRawParameterValue("Slot1_VCO_Freq")->load();
-
             voice->paramUpdateVoice(Slot1_VCO_Freq);
+            
+            
+            paramID = slot+"_VCO_Freq";
+            paramID = slot+"_VCO_PW";
+            paramID = slot+"_VCO_WF";
+            paramID = slot+"_VCO_Inputs";
+            paramID = slot+"_VCO_VM";
+
+
                     
         }
     }

@@ -44,10 +44,28 @@ private:
     
     juce::ValueTree vcoState { "VCO" };
     
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> vcoFreq1Attachment;
-
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> Freq_Attach, PW_Attach;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> WF_Attach, Inputs_Attach, VM_Attach;
     
-
+    //                Slot1_VCO_Freq
+    //                Slot1_VCO_PW
+    //                Slot1_VCO_WF
+    //                Slot1_VCO_Inputs
+    //                Slot1_VCO_VM
+    
+//    std::unique_ptr<>
+    
+    
+//    params.push_back(std::make_unique<juce::AudioParameterChoice> (juce::ParameterID(paramID, 1), slot+" VCO Waveform", juce::StringArray {"Sine","Saw","Square","Noise"}, 0));
+//    
+//    paramID = slot+"_VCO_Inputs";
+//    
+//    params.push_back(std::make_unique<juce::AudioParameterChoice> (juce::ParameterID(paramID, 1), slot+" VCO Inputs", juce::StringArray {"inc MIDI", "Drone"}, 0));
+//    
+//    
+//    paramID = slot+"_VCO_VM";
+//    
+//    params.push_back(std::make_unique<juce::AudioParameterChoice> (juce::ParameterID(paramID, 1), slot+" VCO Voice Mode", juce::StringArray {"monophonic", "polyphonic"}, 0));
 
     
     
