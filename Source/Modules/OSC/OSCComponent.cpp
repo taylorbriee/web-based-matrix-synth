@@ -87,13 +87,11 @@ void OSCComponent::resized()
     freqDial.setTextValueSuffix(" Hz");
     freqDial.setRange(0.0001, 1024, 0.0001);
     
-
     
     auto windowBottomHalf = window;
     
     
-    auto bottomSeg1 = windowBottomHalf.removeFromTop(windowBottomHalf.getHeight() / 4);
-    auto bottomSeg2 = windowBottomHalf.removeFromTop(windowBottomHalf.getHeight() / 3);
+    auto bottomSeg1 = windowBottomHalf.removeFromTop(windowBottomHalf.getHeight() / 3);
     auto bottomSeg3 = windowBottomHalf.removeFromTop(windowBottomHalf.getHeight() / 2);
 
     auto bottomSeg4 = windowBottomHalf;
@@ -107,12 +105,6 @@ void OSCComponent::resized()
     
     waveTypeBox.setBounds(bottomSeg1);
     
-    addAndMakeVisible(inputModeBox);
-    inputModeBox.addItem("Inc MIDI", 1);
-    inputModeBox.addItem("Drone", 2);
-    inputModeBox.setSelectedId(1);
-    
-    inputModeBox.setBounds(bottomSeg2);
     
     addAndMakeVisible(oscVoices);
     oscVoices.addItem("Monophonic", 1);
@@ -148,7 +140,6 @@ void OSCComponent::resized()
     juce::String Inputs_Param = slot+"_VCO_Inputs";
     juce::String VM_Param = slot+"_VCO_VM";
     WF_Attach = std::make_unique<ComboBoxAttachment>(apvts, WF_Param, waveTypeBox);
-    Inputs_Attach = std::make_unique<ComboBoxAttachment>(apvts, Inputs_Param, inputModeBox);
     VM_Attach = std::make_unique<ComboBoxAttachment>(apvts, VM_Param, oscVoices);
     
     

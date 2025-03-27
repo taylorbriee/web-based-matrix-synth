@@ -13,6 +13,9 @@
 #include "SynthSound.h"
 #include "SynthVoice.h"
 
+#include <vector>
+#include <memory>
+
 
 //==============================================================================
 /**
@@ -57,7 +60,21 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
+    void addVoice(juce::String);
+    
+    void addModule(const juce::String moduleType, int slot)
+    {
+        selectedModules[slot]=moduleType;
+    }
+    
+    juce::String getModule(int slot) const
+    {
+        return selectedModules[slot];
+    }
+    
     juce::AudioProcessorValueTreeState apvts;
+
+    juce::String selectedModules[4] = {"", "", "", ""};
 
 
 private:
@@ -66,8 +83,17 @@ private:
     juce::String paramID;
     juce::String slot;
     juce::Synthesiser synth;
+    std::vector<std::unique_ptr<SynthVoice>> currentVoices;
+    juce::String OSCSlots[4] = {"", "", "", ""};
+
+
     juce::AudioProcessorValueTreeState::ParameterLayout createParams();
-    float Slot1_VCO_Freq;
+    float VCO_Freq;
+    
+
+    
+
+
 
     
     

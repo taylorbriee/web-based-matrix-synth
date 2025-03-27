@@ -100,6 +100,9 @@ private:
 //    std::vector<std::unique_ptr<juce::TextButton>> moduleButtons;
     
     std::unique_ptr<juce::TextButton> moduleButtons[4];
+    
+    std::unique_ptr<BaseComponent> moduleComponents[4];
+
 
     juce::AudioProcessorValueTreeState& apvts;
 
@@ -110,8 +113,7 @@ private:
     std::unique_ptr<TextComponent> myTextComponent;
     
     
-    std::unique_ptr<BaseComponent> moduleComponents[4];
-
+    
     bool firstButton;
     
     juce::Rectangle<int> window;

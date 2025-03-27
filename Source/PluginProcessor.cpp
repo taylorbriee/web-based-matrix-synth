@@ -23,13 +23,11 @@ WebMatrixSynthAudioProcessor::WebMatrixSynthAudioProcessor()
 #endif
     , apvts(*this, nullptr, "Parameters", createParams())
 {
-    synth.addSound (new SynthSound());
+    synth.addSound(new SynthSound());
     synth.addVoice(new SynthVoice());
-
-    
 //    for (int i = 0; i < 8; ++i){
-//
-//    } // 8 voices
+//        synth.addVoice(new SynthVoice());
+//    }
 }
 
 WebMatrixSynthAudioProcessor::~WebMatrixSynthAudioProcessor()
@@ -153,6 +151,19 @@ bool WebMatrixSynthAudioProcessor::isBusesLayoutSupported (const BusesLayout& la
 //    
 //}
 
+
+//void WebMatrixSynthAudioProcessor::addVoice(juce::String slot){
+//    for (int i = 0; i < 4; ++i)
+//    {
+//        if (OSCSlots[i]=="")
+//        {
+//            OSCSlots[i] = slot;
+//            break; // Stop after adding
+//        }
+//    }
+//    synth.addVoice(new SynthVoice());
+//}
+
 void WebMatrixSynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
 
@@ -164,7 +175,9 @@ void WebMatrixSynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-
+    
+    
+    
     //original issue here with increment post fix
     for (int i=0; i<synth.getNumVoices(); ++i){
         if (auto voice = dynamic_cast<SynthVoice* >(synth.getVoice(i))){
@@ -172,7 +185,9 @@ void WebMatrixSynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
             
             //for loop for slots
             
-            //check type of module in that index in moduleComponents
+            //how could i possibly find out the current modules that have been initialized without passing pointers between here
+            //and PluginEditor, I cant use apvts because alot of the parameters i have intialized there wont be used till their,
+            //
             
             //update all parameters for that module type
             
@@ -180,10 +195,7 @@ void WebMatrixSynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
             
             
             
-            
-            
-            
-            
+        
             
             // Osc controls
             
@@ -201,8 +213,11 @@ void WebMatrixSynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
             //we instatiate a vco or lfo and make the parameter calls to update the attributes in that slot positions
             //on the outside we have a loop that is calling
             
-            Slot1_VCO_Freq = apvts.getRawParameterValue("Slot1_VCO_Freq")->load();
-            voice->paramUpdateVoice(Slot1_VCO_Freq);
+            
+
+            VCO_Freq = apvts.getRawParameterValue("Slot1_VCO_Freq")->load();
+            voice->paramUpdateVoice(VCO_Freq);
+            
             
             
             paramID = slot+"_VCO_Freq";
@@ -296,11 +311,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout WebMatrixSynthAudioProcessor
         paramID = slot+"_VCO_WF";
         
         params.push_back(std::make_unique<juce::AudioParameterChoice> (juce::ParameterID(paramID, 1), slot+" VCO Waveform", juce::StringArray {"Sine","Saw","Square","Noise"}, 0));
-        
-        paramID = slot+"_VCO_Inputs";
-        
-        params.push_back(std::make_unique<juce::AudioParameterChoice> (juce::ParameterID(paramID, 1), slot+" VCO Inputs", juce::StringArray {"inc MIDI", "Drone"}, 0));
-        
+                
         
         paramID = slot+"_VCO_VM";
         

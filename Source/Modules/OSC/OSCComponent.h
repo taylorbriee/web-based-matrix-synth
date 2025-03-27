@@ -29,13 +29,13 @@ public:
     void saveState() override;
     
     juce::Slider pulseWidthDial, freqDial;
-    juce::ComboBox inputModeBox, waveTypeBox, oscVoices;
+    juce::ComboBox waveTypeBox, oscVoices;
     
 private:
 
-    juce::String slot;
     juce::AudioProcessorValueTreeState& apvts;
     
+    juce::String slot;    
     juce::Label freqLabel, pulseWidthLabel;
     
     juce::TextButton backButton;
@@ -45,7 +45,7 @@ private:
     juce::ValueTree vcoState { "VCO" };
     
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> Freq_Attach, PW_Attach;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> WF_Attach, Inputs_Attach, VM_Attach;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> WF_Attach, VM_Attach;
     
     //                Slot1_VCO_Freq
     //                Slot1_VCO_PW
