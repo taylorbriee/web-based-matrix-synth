@@ -16,8 +16,7 @@
 OSCComponent::OSCComponent(juce::AudioProcessorValueTreeState& apvts, juce::String slot)
 : apvts(apvts), slot(slot)
 {
-
-    DBG("");
+    
 }
 
 OSCComponent::~OSCComponent()
@@ -147,7 +146,7 @@ void OSCComponent::resized()
     juce::String Freq_Param = slot+"_VCO_Freq";
     juce::String PW_Param = slot+"_VCO_PW";
     Freq_Attach = std::make_unique<SliderAttachment>(apvts, Freq_Param, freqDial);
-    PW_Attach = std::make_unique<SliderAttachment>(apvts, PW_Param, freqDial);
+    PW_Attach = std::make_unique<SliderAttachment>(apvts, PW_Param, pulseWidthDial);
     
     
  

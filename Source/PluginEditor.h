@@ -74,7 +74,6 @@ private:
     std::unique_ptr<SliderAttachment> Slot1_VCO_Freq;
     std::unique_ptr<SliderAttachment> Slot1_VCO_PW;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> Slot1_VCO_WF;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> Slot1_VCO_Inputs;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> Slot1_VCO_VM;
 
     

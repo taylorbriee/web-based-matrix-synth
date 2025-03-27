@@ -17,6 +17,10 @@
 class SynthVoice : public juce::SynthesiserVoice
 {
     public:
+    SynthVoice(juce::AudioProcessorValueTreeState& state) : apvts(state)
+    {
+        // You can initialize other things here if needed
+    }
     bool canPlaySound (juce::SynthesiserSound* sound) override;
     void startNote (int midiNoteNumber, float velocity, juce::SynthesiserSound *sound, int currentPitchWheelPosition) override;
     void stopNote (float velocity, bool allowTailOff) override;
@@ -32,12 +36,18 @@ class SynthVoice : public juce::SynthesiserVoice
     juce::ADSR adsr;
     juce::ADSR::Parameters adsrParams;
     
+    juce::dsp::ProcessSpec spec;
     juce::dsp::Oscillator<float> osc { [](float x) { return std::sin (x); }};
     juce::dsp::Gain<float> gain;
     bool isPrepared{false};
+    std::vector<juce::dsp::Oscillator<float>> oscillators { 4 };
+    std::vector<juce::String> previousWaveforms {"","","",""};
+    juce::AudioProcessorValueTreeState& apvts;
     
-    // return std::sin (x); //Sine Wave
-    // return x / MathConstants<float>::pi; // Saw Wave
-    // return x < 0.0f ? -1.0f : 1.0f;  // Square Wave
+
+    
+    // [](float x) { return std::sin (x);} //Sine Wave
+    // [](float x) {return x / MathConstants<float>::pi;} // Saw Wave
+    // [](float x) {return x < 0.0f ? -1.0f : 1.0f;}  // Square Wave
     
 };

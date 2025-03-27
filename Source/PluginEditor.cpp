@@ -174,11 +174,11 @@ void PluginEditor::updateButtons(int index, juce::String updateTo)
 //                Slot1_VCO_Freq
 //                Slot1_VCO_PW
 //                Slot1_VCO_WF
-//                Slot1_VCO_Inputs
 //                Slot1_VCO_VM
             
 //        audioProcessor.addModule("VCO", index);
         
+        apvts.getParameter("Slot"+juce::String(index+1)+"_VCO_isEnabled")->setValueNotifyingHost(true);
         moduleComponents[index] = std::make_unique<OSCComponent>(apvts, juce::String("Slot"+juce::String(index+1)));
         if (auto* oscComponent = dynamic_cast<OSCComponent*>(moduleComponents[index].get()))
         {
@@ -254,10 +254,11 @@ void PluginEditor::updateButtons(int index, juce::String updateTo)
 
         }
     }
-    
+    //check if previous was VCO
     else if (updateTo == "")
     {
         
+        apvts.getParameter("Slot"+juce::String(index+1)+"_VCO_isEnabled")->setValueNotifyingHost(false);
         moduleComponents[index].reset();
         moduleButtons[index].reset();
         selectedModules[index] = "";

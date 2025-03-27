@@ -24,7 +24,7 @@ WebMatrixSynthAudioProcessor::WebMatrixSynthAudioProcessor()
     , apvts(*this, nullptr, "Parameters", createParams())
 {
     synth.addSound(new SynthSound());
-    synth.addVoice(new SynthVoice());
+    synth.addVoice(new SynthVoice(apvts));
 //    for (int i = 0; i < 8; ++i){
 //        synth.addVoice(new SynthVoice());
 //    }
@@ -297,10 +297,13 @@ juce::AudioProcessorValueTreeState::ParameterLayout WebMatrixSynthAudioProcessor
         //monophonic, polyphonic
         
 
+        paramID = slot+"_VCO_isEnabled";
+
+        params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID(paramID, 1), slot+" Oscillator Enabled", false));
+
+
         paramID = slot+"_VCO_Freq";
-//        
-//        //WHY DOES PARAM ID MAKE IT OK WTFFFFF
-//        "Slot1_VCO_Freq"
+        
         params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" VCO Frequency", juce::NormalisableRange<float> { 0.0f, 1000.0f, 0.01f }, 0.0f));
 
         paramID = slot+"_VCO_PW";
