@@ -255,7 +255,7 @@ void PluginEditor::updateButtons(int index, juce::String updateTo)
         }
     }
     //check if previous was VCO
-    else if (updateTo == "")
+    else if (updateTo == " ")
     {
         
         apvts.getParameter("Slot"+juce::String(index+1)+"_VCO_isEnabled")->setValueNotifyingHost(false);
@@ -263,6 +263,8 @@ void PluginEditor::updateButtons(int index, juce::String updateTo)
         moduleButtons[index].reset();
         selectedModules[index] = "";
         
+    }else{
+        moduleButtons[index].reset();
     }
 
     

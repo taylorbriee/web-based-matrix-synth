@@ -86,7 +86,7 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int 
         
         bool isEnabled = apvts.getRawParameterValue(slot+"_VCO_isEnabled")->load();
         
-        DBG(slot+juce::String(isEnabled ? "true" : "false"));
+//        DBG(slot+juce::String(isEnabled ? "true" : "false"));
 
 
         if (isEnabled){
@@ -102,8 +102,6 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int 
             
             if (currentWF != previousWaveforms[i]){
                 previousWaveforms[i] = currentWF;
-                
-                
             
                 if (currentWF == "Sine"){
                     
@@ -124,11 +122,11 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int 
                 }
             }
             selectedOscillator.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
-            gain.process (juce::dsp::ProcessContextReplacing<float> (audioBlock));
 
         }
         
-        
     }
+    gain.process (juce::dsp::ProcessContextReplacing<float> (audioBlock));
+
     
 }
