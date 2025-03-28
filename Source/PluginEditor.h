@@ -32,6 +32,7 @@ public:
     
     void updateButtons(int buttonIndex, juce::String updateTo);
     void updateOutputBoxes(std::string, int);
+    void updateOutputOptions();
 
 private:
     // This reference is provided as a quick way for your editor to

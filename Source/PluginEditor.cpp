@@ -79,6 +79,7 @@ PluginEditor::PluginEditor (WebMatrixSynthAudioProcessor& p)
     
     inputBox1.onChange = [this]() {
         updateButtons(0, inputBox1.getText());
+        updateOutputOptions();
         
 //        DBG("Box1 selected text: " + inputBox1.getText());
         for (int i = 0; i < 4; i++) {
@@ -88,6 +89,7 @@ PluginEditor::PluginEditor (WebMatrixSynthAudioProcessor& p)
     
     inputBox2.onChange = [this]() {
         updateButtons(1, inputBox2.getText());
+        updateOutputOptions();
         
 //        DBG("Box2 selected text: " + inputBox2.getText());
         for (int i = 0; i < 4; i++) {
@@ -97,6 +99,7 @@ PluginEditor::PluginEditor (WebMatrixSynthAudioProcessor& p)
     
     inputBox3.onChange = [this]() {
         updateButtons(2, inputBox3.getText());
+        updateOutputOptions();
         
 //        DBG("Box3 selected text: " + inputBox3.getText());
         for (int i = 0; i < 4; i++) {
@@ -107,6 +110,7 @@ PluginEditor::PluginEditor (WebMatrixSynthAudioProcessor& p)
     
     inputBox4.onChange = [this]() {
         updateButtons(3, inputBox4.getText());
+        updateOutputOptions();
         
 //        DBG("Box4 selected text: " + inputBox4.getText());
         for (int i = 0; i < 4; i++) {
@@ -136,13 +140,8 @@ PluginEditor::PluginEditor (WebMatrixSynthAudioProcessor& p)
 
 }
 
-
-void PluginEditor::updateButtons(int index, juce::String updateTo)
+void PluginEditor::updateOutputOptions()
 {
-    
-    selectedModules[index]=updateTo;
-
-
     //OUTPUT BOXES
     for (auto* box : outputBoxes)
     {
@@ -159,11 +158,43 @@ void PluginEditor::updateButtons(int index, juce::String updateTo)
     }
     
     
+    for (juce::String modules : selectedModules){
+        
+        if (modules == "VCO"){
+            for (auto* box : outputBoxes)
+            {
+                box->addSectionHeading("VCO ");
+                box->addItem("Frequency", outputBoxItemID++);
+                box->addItem("Pulse Width", outputBoxItemID++);
+            }
+            
+        }else if (modules == "LFO"){
+            
+            for (auto* box : outputBoxes)
+            {
+                box->addSectionHeading("LFO ");
+                box->addItem("Frequency", outputBoxItemID++);
+                box->addItem("Pulse Width", outputBoxItemID++);
+            }
+        }
+    }
+    
+}
+
+
+void PluginEditor::updateButtons(int index, juce::String updateTo)
+{
+    
+    selectedModules[index]=updateTo;
+
+
+
+    
+    
     
     // Create new buttons based on selectedModules
     if (updateTo == "VCO")
     {
-
         
 //            juce::Slider pulseWidthDial, freqDial;
 //            juce::ComboBox inputModeBox, waveTypeBox, oscVoices;
@@ -214,14 +245,6 @@ void PluginEditor::updateButtons(int index, juce::String updateTo)
 
 
 
-        for (auto* box : outputBoxes)
-        {
-            box->addSectionHeading("VCO ");
-
-            box->addItem("Frequency", outputBoxItemID++);
-            box->addItem("Pulse Width", outputBoxItemID++);
-
-        }
     }
     
     else if (updateTo == "LFO")
@@ -244,15 +267,7 @@ void PluginEditor::updateButtons(int index, juce::String updateTo)
         moduleButtons[index]= std::move(newButton);
 
         
-        for (auto* box : outputBoxes)
-        {
-            
-            box->addSectionHeading("LFO ");
 
-            box->addItem("Frequency", outputBoxItemID++);
-            box->addItem("Pulse Width", outputBoxItemID++);
-
-        }
     }
     //check if previous was VCO
     else if (updateTo == " ")
