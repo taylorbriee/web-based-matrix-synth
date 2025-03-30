@@ -136,6 +136,18 @@ void LFOComponent::resized()
     freqLabel.setText("Frequency", juce::dontSendNotification);
     pulseWidthLabel.setText("Pulse Width", juce::dontSendNotification);
 
+    
+    
+    
+    
+    
+    
+    juce::String Freq_Param = slot+"_LFO_Freq";
+    juce::String PW_Param = slot+"_LFO_PW";
+    juce::String WF_Param = slot+"_LFO_WF";
+//    WF_Attach = std::make_unique<ComboBoxAttachment>(apvts, WF_Param, waveTypeBox);
+
+
  
 }
 

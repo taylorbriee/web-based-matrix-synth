@@ -59,7 +59,8 @@ public:
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
-    
+    void createGridParam(int x, int y, std::vector<std::unique_ptr<juce::RangedAudioParameter>>& params);
+
     void addVoice(juce::String);
     
     void addModule(const juce::String moduleType, int slot)
@@ -75,12 +76,14 @@ public:
     juce::AudioProcessorValueTreeState apvts;
 
     juce::String selectedModules[4] = {"", "", "", ""};
+    
+    
 
 
 private:
     //==============================================================================
     
-    juce::String paramID;
+    juce::String paramID, dialDimensions;
     juce::String slot;
     juce::Synthesiser synth;
     std::vector<std::unique_ptr<SynthVoice>> currentVoices;

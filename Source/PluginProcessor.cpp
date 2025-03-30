@@ -272,6 +272,13 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
     return new WebMatrixSynthAudioProcessor();
 }
 
+void WebMatrixSynthAudioProcessor::createGridParam(int x, int y, std::vector<std::unique_ptr<juce::RangedAudioParameter>>& params)
+{
+    dialDimensions = juce::String(x)+"x"+juce::String(y);
+    paramID = dialDimensions+"Dial";
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), dialDimensions+" Dial", juce::NormalisableRange<float> { 0.0f, 10.0f, 0.01f }, 0.0f));
+}
+
 
 juce::AudioProcessorValueTreeState::ParameterLayout WebMatrixSynthAudioProcessor::createParams()
 {
@@ -298,42 +305,42 @@ juce::AudioProcessorValueTreeState::ParameterLayout WebMatrixSynthAudioProcessor
         
 
         paramID = slot+"_VCO_isEnabled";
-
         params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID(paramID, 1), slot+" Oscillator Enabled", false));
 
 
         paramID = slot+"_VCO_Freq";
-        
-        params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" VCO Frequency", juce::NormalisableRange<float> { 0.0f, 1000.0f, 0.01f }, 0.0f));
+        params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" VCO Frequency", juce::NormalisableRange<float> { 0.0f, 5915.0f, 0.01f }, 0.0f));
 
         paramID = slot+"_VCO_PW";
-        
         params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" VCO Pulse Width", juce::NormalisableRange<float> { 0.0f, 100.0f, 0.01f }, 0.0f));
         
         
         paramID = slot+"_VCO_WF";
-        
         params.push_back(std::make_unique<juce::AudioParameterChoice> (juce::ParameterID(paramID, 1), slot+" VCO Waveform", juce::StringArray {"Sine","Saw","Square","Noise"}, 0));
                 
         
         paramID = slot+"_VCO_VM";
-        
         params.push_back(std::make_unique<juce::AudioParameterChoice> (juce::ParameterID(paramID, 1), slot+" VCO Voice Mode", juce::StringArray {"monophonic", "polyphonic"}, 0));
         
         
         paramID = slot+"_LFO_Freq";
-        
         params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" LFO Frequency", juce::NormalisableRange<float> { 0.0f, 1000.0f, 0.01f }, 0.0f, "Hz"));
         
         
         paramID = slot+"_LFO_PW";
-        
         params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" LFO Pulse Width", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.01f }, 0.0f, "%"));
         
         paramID = slot+"_LFO_WF";
-        
         params.push_back(std::make_unique<juce::AudioParameterChoice> (juce::ParameterID(paramID, 1), slot+" LFO Waveform", juce::StringArray {"Sine","Saw","Square","Noise"}, 0));
 
+        
+//        for(int x=1; x<5; x++){
+//            for(int y=1; y<5; y++){
+//                createGridParam(x, y, params);
+//            }
+//        }
+        
+        
         
         //Slot1_VCO_Freq
     

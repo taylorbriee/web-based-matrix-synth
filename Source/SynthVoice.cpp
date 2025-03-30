@@ -40,6 +40,13 @@ void SynthVoice::pitchWheelMoved (int newPitchWheelValue)
     
 }
 
+
+
+float voltageToFrequency(float voltage, float referenceFrequency = 440.0f)
+{
+    return referenceFrequency * std::pow(2.0f, voltage);
+}
+
 void SynthVoice::prepareToPlay (double sampleRate, int samplesPerBlock, int outputChannels)
 {
 
@@ -57,8 +64,8 @@ void SynthVoice::prepareToPlay (double sampleRate, int samplesPerBlock, int outp
     gain.setGainLinear (0.3f);
         
     for (int i=0; i<4; i++){
-        oscillators[i].prepare(spec);
-        oscillators[i].initialise([](float x) { return 0.0f; });
+        InputOscillators[i].prepare(spec);
+        InputOscillators[i].initialise([](float x) { return 0.0f; });
     }
     
     isPrepared = true;
@@ -68,26 +75,78 @@ void SynthVoice::paramUpdateVoice(const float freq){
     osc.setFrequency(freq);
 }
 
+void SynthVoice::populateMatrixValues(){
+    
+    //add dials to apvts parameters
+    
+    for(int y=1; y<5; y++){
+        float oscValue = InputOscillators[y].processSample(0.0f);
+        float scaledOSCValue = juce::jmap(oscValue, -1.0f, 1.0f, -5.0f, 5.0f);
+        
+        
+        for(int x=1; x<5; x++){
+            //acess all the dial values one by one
+            float dialValue = apvts.getRawParameterValue(juce::String(x)+"x"+juce::String(y)+"Dials")->load();
+            //scaling the rows value but them and adding the values to their space in the matrix
+            matrixValues[y][x] = scaledOSCValue * (dialValue/10);
+        }
+    }
+}
+
+
+void SynthVoice::calcOutputVoltages(){
+    
+    for(int y=1; y<5; y++){
+        currentColumn=0;
+        for(int x=1; x<5; x++){
+            currentColumn += matrixValues[x][y];
+        }
+        outputVoltages[y] = currentColumn;
+    }
+}
+
 
 void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int startSample, int numSamples)
 {
     jassert(isPrepared);
+    populateMatrixValues();
+    calcOutputVoltages();
+    
+    
+    
+    //instantiate old ossilators 
+    for(int i=0; i<4; i++){
+        outputVoltages[i]
+    }
+    
+    
+    //itterate over the
+
+
+
+
+    
+    
+    
+    //for the columns that have main output selected, sum up the values in that column
+    //create an ossilator with the initilize function just being the varaible of the summed voltage values.
+    //call prepare on those ossilators.
+    
+    
+    
     
     juce::dsp::AudioBlock<float> audioBlock { outputBuffer };
 
         
     for (int i=0; i<4; i++){
-        juce::dsp::Oscillator<float>& selectedOscillator = oscillators.at(i);
-                
         
+        
+        
+        
+        juce::dsp::Oscillator<float>& selectedOscillator = InputOscillators.at(i);
         //check is enabled
         juce::String slot = "Slot" + juce::String(i+1);
-        
-        
         bool isEnabled = apvts.getRawParameterValue(slot+"_VCO_isEnabled")->load();
-        
-//        DBG(slot+juce::String(isEnabled ? "true" : "false"));
-
 
         if (isEnabled){
             
@@ -121,11 +180,29 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int 
                 
                 }
             }
-            selectedOscillator.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
+            //
+            
+            
+            
+//            selectedOscillator.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
 
         }
         
+        //check which dropdown has Main Output selected
+        //then depending on which do pass voltage to that osc and process it to th
+        
+        
+        //Outputting sounds.
+        auto* outputSelectParam = dynamic_cast<juce::AudioParameterChoice*>(apvts.getParameter("Output"+juce::String(i)));
+        juce::String outputDropdown = outputSelectParam->getCurrentChoiceName();
+        
+        if(outputDropdown == "Main Output"){
+            OutputOscillators[i].process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
+        }
     }
+    
+    
+    
     gain.process (juce::dsp::ProcessContextReplacing<float> (audioBlock));
 
     

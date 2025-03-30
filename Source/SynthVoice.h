@@ -29,10 +29,16 @@ class SynthVoice : public juce::SynthesiserVoice
     void prepareToPlay (double sampleRate, int samplesPerBlock, int outputChannels);
     void renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int startSample, int numSamples) override;
     void paramUpdateVoice(const float freq);
+    float voltageToFrequency(float voltage, float referenceFrequency = 440.0f);
+    void populateMatrixValues();
+    void calcOutputVoltages();
+    
     
     private:
     
+
     
+    std::vector<float> values;
     juce::ADSR adsr;
     juce::ADSR::Parameters adsrParams;
     
@@ -40,11 +46,18 @@ class SynthVoice : public juce::SynthesiserVoice
     juce::dsp::Oscillator<float> osc { [](float x) { return std::sin (x); }};
     juce::dsp::Gain<float> gain;
     bool isPrepared{false};
-    std::vector<juce::dsp::Oscillator<float>> oscillators { 4 };
+    std::vector<juce::dsp::Oscillator<float>> InputOscillators { 4 };
+    std::vector<juce::dsp::Oscillator<float>> OutputOscillators { 4 };
+    
+    std::vector<int> outputVoltages {0,0,0,0};
+    int currentColumn = 0;
+
     std::vector<juce::String> previousWaveforms {"","","",""};
     juce::AudioProcessorValueTreeState& apvts;
     
-
+    std::vector<std::vector<float>> matrixValues;
+    
+    int columnSum;
     
     // [](float x) { return std::sin (x);} //Sine Wave
     // [](float x) {return x / MathConstants<float>::pi;} // Saw Wave

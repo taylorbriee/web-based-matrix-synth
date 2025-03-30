@@ -30,7 +30,6 @@ PluginEditor::PluginEditor (WebMatrixSynthAudioProcessor& p)
 
     
     
-    dial1.setSliderStyle(juce::Slider::Rotary);
     
     myButton.setButtonText("VCO");  // Set text of the button
     addAndMakeVisible(myButton);  // Make the button visible in the UI
@@ -154,31 +153,29 @@ void PluginEditor::updateOutputOptions()
     {
         box->addItem(" ", outputBoxItemID++);
         box->addItem("Main Output", outputBoxItemID++);
-
     }
     
-    
-    for (juce::String modules : selectedModules){
+    for (int i=0; i<4; i++){
+        curModule = selectedModules[i];
         
-        if (modules == "VCO"){
+        if (curModule == "VCO"){
             for (auto* box : outputBoxes)
             {
-                box->addSectionHeading("VCO ");
+                box->addSectionHeading("(Slot: "+juce::String(i)+") VCO");
                 box->addItem("Frequency", outputBoxItemID++);
                 box->addItem("Pulse Width", outputBoxItemID++);
             }
             
-        }else if (modules == "LFO"){
+        }else if (curModule == "LFO"){
             
             for (auto* box : outputBoxes)
             {
-                box->addSectionHeading("LFO ");
+                box->addSectionHeading("(Slot: "+juce::String(i)+" LFO");
                 box->addItem("Frequency", outputBoxItemID++);
                 box->addItem("Pulse Width", outputBoxItemID++);
             }
         }
     }
-    
 }
 
 
@@ -272,7 +269,6 @@ void PluginEditor::updateButtons(int index, juce::String updateTo)
     //check if previous was VCO
     else if (updateTo == " ")
     {
-        
         apvts.getParameter("Slot"+juce::String(index+1)+"_VCO_isEnabled")->setValueNotifyingHost(false);
         moduleComponents[index].reset();
         moduleButtons[index].reset();
@@ -356,7 +352,7 @@ void PluginEditor::resized()
     
     
     jassert (true);
-    dial1.setBounds(getLocalBounds());
+//    dial1.setBounds(getLocalBounds());
     
 
     
@@ -365,10 +361,10 @@ void PluginEditor::resized()
     // Define a 4x4 grid (4 columns, 4 rows)
     grid.templateColumns = {
         juce::Grid::TrackInfo(juce::Grid::Fr(1)),
-                             juce::Grid::TrackInfo(juce::Grid::Fr(1)),
-                             juce::Grid::TrackInfo(juce::Grid::Fr(1)),
-                             juce::Grid::TrackInfo(juce::Grid::Fr(1)),
-                             juce::Grid::TrackInfo(juce::Grid::Fr(1)) };
+                         juce::Grid::TrackInfo(juce::Grid::Fr(1)),
+                         juce::Grid::TrackInfo(juce::Grid::Fr(1)),
+                         juce::Grid::TrackInfo(juce::Grid::Fr(1)),
+                         juce::Grid::TrackInfo(juce::Grid::Fr(1)) };
 
     grid.templateRows = { juce::Grid::TrackInfo(juce::Grid::Fr(1)),
                           juce::Grid::TrackInfo(juce::Grid::Fr(1)),
@@ -382,11 +378,13 @@ void PluginEditor::resized()
 
     
     // Add components to the grid
+    
+//    dial_1x1, dial_1x2, dial_1x3, dial_1x4, dial_2x1, dial_2x2, dial_2x3, dial_2x4, dial_3x1, dial_3x2, dial_3x3, dial_3x4, dial_4x1, dial_4x2, dial_4x3, dial_4x4,
     grid.items = {
-        juce::GridItem(inputBox1), juce::GridItem(dial1), juce::GridItem(dial2), juce::GridItem(dial3), juce::GridItem(dial4),
-        juce::GridItem(inputBox2), juce::GridItem(dial5), juce::GridItem(dial6), juce::GridItem(dial7), juce::GridItem(dial8),
-        juce::GridItem(inputBox3), juce::GridItem(dial9), juce::GridItem(dial10), juce::GridItem(dial11), juce::GridItem(dial12),
-        juce::GridItem(inputBox4), juce::GridItem(dial13), juce::GridItem(dial14), juce::GridItem(dial15), juce::GridItem(dial16),
+        juce::GridItem(inputBox1), juce::GridItem(dial_1x1), juce::GridItem(dial_2x1), juce::GridItem(dial_3x1), juce::GridItem(dial_4x1),
+        juce::GridItem(inputBox2), juce::GridItem(dial_1x2), juce::GridItem(dial_2x2), juce::GridItem(dial_3x2), juce::GridItem(dial_4x2),
+        juce::GridItem(inputBox3), juce::GridItem(dial_1x3), juce::GridItem(dial_2x3), juce::GridItem(dial_3x3), juce::GridItem(dial_4x3),
+        juce::GridItem(inputBox4), juce::GridItem(dial_1x4), juce::GridItem(dial_2x4), juce::GridItem(dial_3x4), juce::GridItem(dial_4x4),
         juce::GridItem(*myTextComponent), juce::GridItem(oDial1), juce::GridItem(oDial2), juce::GridItem(oDial3), juce::GridItem(oDial4),
         juce::GridItem(), juce::GridItem(outputBox1), juce::GridItem(outputBox2), juce::GridItem(outputBox3), juce::GridItem(outputBox4)
     };

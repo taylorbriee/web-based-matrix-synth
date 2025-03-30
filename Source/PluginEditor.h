@@ -40,7 +40,7 @@ private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     
-    juce::Slider dial1, dial2, dial3, dial4, dial5, dial6, dial7, dial8, dial9, dial10, dial11, dial12, dial13, dial14, dial15, dial16, oDial1, oDial2, oDial3, oDial4;
+    juce::Slider dial_1x1, dial_1x2, dial_1x3, dial_1x4, dial_2x1, dial_2x2, dial_2x3, dial_2x4, dial_3x1, dial_3x2, dial_3x3, dial_3x4, dial_4x1, dial_4x2, dial_4x3, dial_4x4, oDial1, oDial2, oDial3, oDial4;
     
     juce::Grid grid;
 
@@ -50,10 +50,10 @@ private:
     std::unordered_map<juce::String, std::unordered_map<juce::String, std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>>> sliderAttachments;
     
     juce::Slider* dials[20] = {
-        &dial1, &dial2, &dial3, &dial4,
-        &dial5, &dial6, &dial7, &dial8,
-        &dial9, &dial10, &dial11, &dial12,
-        &dial13, &dial14, &dial15, &dial16,
+        &dial_1x1, &dial_2x1, &dial_3x1, &dial_4x1,
+        &dial_1x2, &dial_2x2, &dial_3x2, &dial_4x2,
+        &dial_1x3, &dial_2x3, &dial_3x3, &dial_4x3,
+        &dial_1x4, &dial_2x4, &dial_3x4, &dial_4x4,
         &oDial1, &oDial2, &oDial3, &oDial4
     };
     
@@ -98,6 +98,8 @@ private:
     
     
 //    std::vector<std::unique_ptr<juce::TextButton>> moduleButtons;
+    
+    juce::String curModule;
     
     std::unique_ptr<juce::TextButton> moduleButtons[4];
     
