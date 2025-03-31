@@ -68,6 +68,9 @@ void SynthVoice::prepareToPlay (double sampleRate, int samplesPerBlock, int outp
         InputOscillators[i].initialise([](float x) { return 0.0f; });
     }
     
+    
+    
+    
     isPrepared = true;
 }
 
@@ -109,24 +112,12 @@ void SynthVoice::calcOutputVoltages(){
 void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int startSample, int numSamples)
 {
     jassert(isPrepared);
-    populateMatrixValues();
-    calcOutputVoltages();
-    
-    
-    
-    //instantiate old ossilators 
-    for(int i=0; i<4; i++){
-        outputVoltages[i]
-    }
-    
-    
-    //itterate over the
+//    populateMatrixValues();
+//    calcOutputVoltages();
+//    
+//    summedVoltage = 0.0f;
 
 
-
-
-    
-    
     
     //for the columns that have main output selected, sum up the values in that column
     //create an ossilator with the initilize function just being the varaible of the summed voltage values.
@@ -139,8 +130,6 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int 
 
         
     for (int i=0; i<4; i++){
-        
-        
         
         
         juce::dsp::Oscillator<float>& selectedOscillator = InputOscillators.at(i);
@@ -180,11 +169,8 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int 
                 
                 }
             }
-            //
             
-            
-            
-//            selectedOscillator.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
+            selectedOscillator.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
 
         }
         
@@ -193,14 +179,25 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int 
         
         
         //Outputting sounds.
-        auto* outputSelectParam = dynamic_cast<juce::AudioParameterChoice*>(apvts.getParameter("Output"+juce::String(i)));
+        auto* outputSelectParam = dynamic_cast<juce::AudioParameterChoice*>(apvts.getParameter("Output"+juce::String(i+1)));
         juce::String outputDropdown = outputSelectParam->getCurrentChoiceName();
         
         if(outputDropdown == "Main Output"){
-            OutputOscillators[i].process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
+            
+            summedVoltage+= outputVoltages[i];
         }
     }
     
+    for (int sample = 0; sample < numSamples; ++sample) {
+        float voltageValue = summedVoltage;
+        float audioSample = juce::jlimit(-1.0f, 1.0f, voltageValue);
+
+        // Write sample to each channel without overwriting (add to prevent conflicts)
+        for (int channel = 0; channel < outputBuffer.getNumChannels(); ++channel) {
+            outputBuffer.addSample(channel, startSample + sample, audioSample);
+        }
+    }
+
     
     
     gain.process (juce::dsp::ProcessContextReplacing<float> (audioBlock));

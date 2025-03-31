@@ -47,9 +47,9 @@ class SynthVoice : public juce::SynthesiserVoice
     juce::dsp::Gain<float> gain;
     bool isPrepared{false};
     std::vector<juce::dsp::Oscillator<float>> InputOscillators { 4 };
-    std::vector<juce::dsp::Oscillator<float>> OutputOscillators { 4 };
+    float summedVoltage;
     
-    std::vector<int> outputVoltages {0,0,0,0};
+    std::vector<float> outputVoltages {0.f, 0.f, 0.f, 0.f};
     int currentColumn = 0;
 
     std::vector<juce::String> previousWaveforms {"","","",""};

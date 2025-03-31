@@ -33,6 +33,9 @@ public:
     
 private:
     
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> LFO_Freq_Attach, LFO_PW_Attach;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> LFO_WF_Attach;
+    
     juce::String slot;
     juce::AudioProcessorValueTreeState& apvts;
     

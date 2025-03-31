@@ -130,7 +130,6 @@ void OSCComponent::resized()
     
     
     using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
-    
     using ComboBoxAttachment = juce::AudioProcessorValueTreeState::ComboBoxAttachment;
 
 
@@ -138,15 +137,15 @@ void OSCComponent::resized()
     juce::String WF_Param = slot+"_VCO_WF";
     juce::String Inputs_Param = slot+"_VCO_Inputs";
     juce::String VM_Param = slot+"_VCO_VM";
-    WF_Attach = std::make_unique<ComboBoxAttachment>(apvts, WF_Param, waveTypeBox);
-    VM_Attach = std::make_unique<ComboBoxAttachment>(apvts, VM_Param, oscVoices);
+    VCO_WF_Attach = std::make_unique<ComboBoxAttachment>(apvts, WF_Param, waveTypeBox);
+    VCO_VM_Attach = std::make_unique<ComboBoxAttachment>(apvts, VM_Param, oscVoices);
     
     
     
     juce::String Freq_Param = slot+"_VCO_Freq";
     juce::String PW_Param = slot+"_VCO_PW";
-    Freq_Attach = std::make_unique<SliderAttachment>(apvts, Freq_Param, freqDial);
-    PW_Attach = std::make_unique<SliderAttachment>(apvts, PW_Param, pulseWidthDial);
+    VCO_Freq_Attach = std::make_unique<SliderAttachment>(apvts, Freq_Param, freqDial);
+    VCO_PW_Attach = std::make_unique<SliderAttachment>(apvts, PW_Param, pulseWidthDial);
     
     
  

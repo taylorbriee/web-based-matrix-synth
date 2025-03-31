@@ -44,8 +44,8 @@ private:
     
     juce::ValueTree vcoState { "VCO" };
     
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> Freq_Attach, PW_Attach;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> WF_Attach, VM_Attach;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> VCO_Freq_Attach, VCO_PW_Attach;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> VCO_WF_Attach, VCO_VM_Attach;
     
     //                Slot1_VCO_Freq
     //                Slot1_VCO_PW

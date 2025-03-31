@@ -138,16 +138,18 @@ void LFOComponent::resized()
 
     
     
-    
+    using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+    using ComboBoxAttachment = juce::AudioProcessorValueTreeState::ComboBoxAttachment;
     
     
     
     juce::String Freq_Param = slot+"_LFO_Freq";
     juce::String PW_Param = slot+"_LFO_PW";
     juce::String WF_Param = slot+"_LFO_WF";
-//    WF_Attach = std::make_unique<ComboBoxAttachment>(apvts, WF_Param, waveTypeBox);
-
-
+    
+    LFO_Freq_Attach = std::make_unique<SliderAttachment>(apvts, Freq_Param, freqDial);
+    LFO_PW_Attach = std::make_unique<SliderAttachment>(apvts, PW_Param, pulseWidthDial);
+    LFO_WF_Attach = std::make_unique<ComboBoxAttachment>(apvts, WF_Param, waveTypeBox);
  
 }
 

@@ -177,60 +177,6 @@ void WebMatrixSynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
 
     
     
-    
-    //original issue here with increment post fix
-    for (int i=0; i<synth.getNumVoices(); ++i){
-        if (auto voice = dynamic_cast<SynthVoice* >(synth.getVoice(i))){
-            
-            
-            //for loop for slots
-            
-            //how could i possibly find out the current modules that have been initialized without passing pointers between here
-            //and PluginEditor, I cant use apvts because alot of the parameters i have intialized there wont be used till their,
-            //
-            
-            //update all parameters for that module type
-            
-            
-            
-            
-            
-        
-            
-            // Osc controls
-            
-            
-            //itterate through model components calling the corripsonding method either for vco or lfo that updates the corrisponding varaibles.
-            
-            
-            
-            //created a nested disctionary, has 4 main slots, looks in module components and updates if vco or lfo is in each slots.
-            //under lfo or vco are the parameters for said lfo or vco.
-            
-            
-            
-            //we call a function with the slot number (corrisponds to the index) and depending on the module in moduleComponents
-            //we instatiate a vco or lfo and make the parameter calls to update the attributes in that slot positions
-            //on the outside we have a loop that is calling
-            
-            
-
-            VCO_Freq = apvts.getRawParameterValue("Slot1_VCO_Freq")->load();
-            voice->paramUpdateVoice(VCO_Freq);
-            
-            
-            
-            paramID = slot+"_VCO_Freq";
-            paramID = slot+"_VCO_PW";
-            paramID = slot+"_VCO_WF";
-            paramID = slot+"_VCO_Inputs";
-            paramID = slot+"_VCO_VM";
-
-
-                    
-        }
-    }
-    
     synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
@@ -238,6 +184,15 @@ void WebMatrixSynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
 
         // ..do something to the data...
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
 
 //==============================================================================
@@ -324,7 +279,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout WebMatrixSynthAudioProcessor
         
         
         paramID = slot+"_LFO_Freq";
-        params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" LFO Frequency", juce::NormalisableRange<float> { 0.0f, 1000.0f, 0.01f }, 0.0f, "Hz"));
+        params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" LFO Frequency", juce::NormalisableRange<float> { 0.0f, 1024.0f, 0.0001f }, 0.0f, "Hz"));
         
         
         paramID = slot+"_LFO_PW";
