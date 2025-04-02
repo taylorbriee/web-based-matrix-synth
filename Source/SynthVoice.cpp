@@ -130,96 +130,100 @@ void SynthVoice::calcOutputVoltages(){
 void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int startSample, int numSamples)
 {
     jassert(isPrepared);
-    populateMatrixValues();
-    calcOutputVoltages();
-    
-    summedVoltage = 0.0f;
-    
-    //for the columns that have main output selected, sum up the values in that column
-    //create an ossilator with the initilize function just being the varaible of the summed voltage values.
-    //call prepare on those ossilators.
-    
-    
-    
     
     juce::dsp::AudioBlock<float> audioBlock { outputBuffer };
 
-        
-    for (int i=0; i<4; i++){
-        
-        
-        juce::dsp::Oscillator<float>& selectedOscillator = InputOscillators.at(i);
-        //check is enabled
-        juce::String slot = "Slot" + juce::String(i+1);
-        bool isEnabled = apvts.getRawParameterValue(slot+"_VCO_isEnabled")->load();
-
-        if (isEnabled){
-            
-            
-            auto* waveformParam = dynamic_cast<juce::AudioParameterChoice*>(apvts.getParameter(slot+"_VCO_WF"));
-            juce::String currentWF = waveformParam->getCurrentChoiceName();
-            
-            //get that ossilators parameters
-            float freq = apvts.getRawParameterValue(slot+"_VCO_Freq")->load();
-            selectedOscillator.setFrequency(freq);
-            
-            
-            if (currentWF != previousWaveforms[i]){
-                previousWaveforms[i] = currentWF;
-            
-                if (currentWF == "Sine"){
-                    
-                    selectedOscillator.initialise([](float x) { return std::sin (x); });
-                    
-                }else if(currentWF == "Saw"){
-                    
-                    selectedOscillator.initialise([](float x) {return x / juce::MathConstants<float>::pi;});
-                    
-                }else if(currentWF == "Square"){
-                    
-                    selectedOscillator.initialise([](float x) {return x < 0.0f ? -1.0f : 1.0f;} );
-                    
-                }else if(currentWF == "Noise"){
-                    
-                    selectedOscillator.initialise([](float) {return juce::Random::getSystemRandom().nextFloat() * 2.0f - 1.0f;});
-                }
-            }
-            
-//            selectedOscillator.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
-
-        }
-        
-        //check which dropdown has Main Output selected
-        //then depending on which do pass voltage to that osc and process it to th
-        
-        
-        //Outputting sounds.
-        auto* outputSelectParam = dynamic_cast<juce::AudioParameterChoice*>(apvts.getParameter("Matrix_Output"+juce::String(i+1)));
-        juce::String outputDropdown = outputSelectParam->getCurrentChoiceName();
-        
-        if(outputDropdown == "Main Output"){
-            summedVoltage+= outputVoltages[i];
-            
-            DBG("Summed Voltage: "+ juce::String(summedVoltage));
-
-            
-//            DBG("Summed Volts: "+ juce::String(summedVoltage));
-        }
-    }
     
     for (int sample = 0; sample < numSamples; ++sample) {
+        populateMatrixValues();
+        calcOutputVoltages();
+        
+        summedVoltage = 0.0f;
+        
+        //for the columns that have main output selected, sum up the values in that column
+        //create an ossilator with the initilize function just being the varaible of the summed voltage values.
+        //call prepare on those ossilators.
+        
+
+            
+        for (int i=0; i<4; i++){
+            
+            
+            juce::dsp::Oscillator<float>& selectedOscillator = InputOscillators.at(i);
+            //check is enabled
+            juce::String slot = "Slot" + juce::String(i+1);
+            bool isEnabled = apvts.getRawParameterValue(slot+"_VCO_isEnabled")->load();
+
+            if (isEnabled){
+                
+                
+                auto* waveformParam = dynamic_cast<juce::AudioParameterChoice*>(apvts.getParameter(slot+"_VCO_WF"));
+                juce::String currentWF = waveformParam->getCurrentChoiceName();
+                
+                //get that ossilators parameters
+                float freq = apvts.getRawParameterValue(slot+"_VCO_Freq")->load();
+                selectedOscillator.setFrequency(freq);
+                
+                
+                if (currentWF != previousWaveforms[i]){
+                    previousWaveforms[i] = currentWF;
+                
+                    if (currentWF == "Sine"){
+                        
+                        selectedOscillator.initialise([](float x) { return std::sin (x); });
+                        
+                    }else if(currentWF == "Saw"){
+                        
+                        selectedOscillator.initialise([](float x) {return x / juce::MathConstants<float>::pi;});
+                        
+                    }else if(currentWF == "Square"){
+                        
+                        selectedOscillator.initialise([](float x) {return x < 0.0f ? -1.0f : 1.0f;} );
+                        
+                    }else if(currentWF == "Noise"){
+                        
+                        selectedOscillator.initialise([](float) {return juce::Random::getSystemRandom().nextFloat() * 2.0f - 1.0f;});
+                    }
+                }
+                
+    //            selectedOscillator.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
+
+            }
+            
+            //check which dropdown has Main Output selected
+            //then depending on which do pass voltage to that osc and process it to th
+            
+            
+            //Outputting sounds.
+            auto* outputSelectParam = dynamic_cast<juce::AudioParameterChoice*>(apvts.getParameter("Matrix_Output"+juce::String(i+1)));
+            juce::String outputDropdown = outputSelectParam->getCurrentChoiceName();
+            
+            if(outputDropdown == "Main Output"){
+                summedVoltage+= outputVoltages[i];
+                
+                DBG("Summed Voltage: "+ juce::String(summedVoltage));
+
+                
+    //            DBG("Summed Volts: "+ juce::String(summedVoltage));
+            }
+        }
+        
         float voltageValue = summedVoltage;
         float audioSample = juce::jlimit(-1.0f, 1.0f, voltageValue);
 
-        // Write sample to each channel without overwriting (add to prevent conflicts)
-        for (int channel = 0; channel < outputBuffer.getNumChannels(); ++channel) {
-            outputBuffer.addSample(channel, startSample + sample, audioSample);
-        }
+
+        outputBuffer.addSample(0, startSample + sample, audioSample);
+        
     }
-
-    
-    
     gain.process (juce::dsp::ProcessContextReplacing<float> (audioBlock));
+}
+
 
     
-}
+//    for (int channel = 0; channel < outputBuffer.getNumChannels(); ++channel) {
+//        outputBuffer.addSample(channel, startSample + sample, audioSample);
+//    }
+    
+
+    
+
