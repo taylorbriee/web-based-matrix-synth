@@ -83,7 +83,6 @@ public:
 private:
     //==============================================================================
     
-    juce::String paramID, dialDimensions;
     juce::String slot;
     juce::Synthesiser synth;
     std::vector<std::unique_ptr<SynthVoice>> currentVoices;

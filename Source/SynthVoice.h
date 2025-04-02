@@ -17,9 +17,10 @@
 class SynthVoice : public juce::SynthesiserVoice
 {
     public:
-    SynthVoice(juce::AudioProcessorValueTreeState& state) : apvts(state)
+    SynthVoice(juce::AudioProcessorValueTreeState& state)
+        : apvts(state), matrixValues(4, std::vector<float>(4, 0.0f)) // Incorrect semicolon
     {
-        // You can initialize other things here if needed
+        // Initialization code
     }
     bool canPlaySound (juce::SynthesiserSound* sound) override;
     void startNote (int midiNoteNumber, float velocity, juce::SynthesiserSound *sound, int currentPitchWheelPosition) override;
@@ -50,7 +51,7 @@ class SynthVoice : public juce::SynthesiserVoice
     float summedVoltage;
     
     std::vector<float> outputVoltages {0.f, 0.f, 0.f, 0.f};
-    int currentColumn = 0;
+    float currentColumn = 0.f;
 
     std::vector<juce::String> previousWaveforms {"","","",""};
     juce::AudioProcessorValueTreeState& apvts;

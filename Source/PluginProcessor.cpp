@@ -229,8 +229,8 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 
 void WebMatrixSynthAudioProcessor::createGridParam(int x, int y, std::vector<std::unique_ptr<juce::RangedAudioParameter>>& params)
 {
-    dialDimensions = juce::String(x)+"x"+juce::String(y);
-    paramID = dialDimensions+"Dial";
+    juce::String dialDimensions = juce::String(x)+"x"+juce::String(y);
+    juce::String paramID = dialDimensions+"Dial";
     params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), dialDimensions+" Dial", juce::NormalisableRange<float> { 0.0f, 10.0f, 0.01f }, 0.0f));
 }
 
@@ -244,6 +244,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout WebMatrixSynthAudioProcessor
     juce::String slot;
     
     juce::String paramID;
+    
+    
     
     for(int i=1; i<5; i++){
         
@@ -289,11 +291,37 @@ juce::AudioProcessorValueTreeState::ParameterLayout WebMatrixSynthAudioProcessor
         params.push_back(std::make_unique<juce::AudioParameterChoice> (juce::ParameterID(paramID, 1), slot+" LFO Waveform", juce::StringArray {"Sine","Saw","Square","Noise"}, 0));
 
         
-//        for(int x=1; x<5; x++){
-//            for(int y=1; y<5; y++){
-//                createGridParam(x, y, params);
-//            }
-//        }
+        //loop for outputs
+        //for each slot options
+        
+        
+        paramID = "Matrix_Output"+juce::String(i);
+        juce::String paramName = "Matrix Output "+juce::String(i);
+
+        juce::StringArray OutputOptions = {};
+        OutputOptions.add(" ");
+        OutputOptions.add("Main Output");
+        
+        for (int slots=1; slots<5; slots++){
+            
+            
+            juce::String slot = "Slot "+juce::String(slots);
+            OutputOptions.addArray(juce::StringArray {
+                slot+" VCO Freq",
+                slot+" VCO PW",
+                slot+" LFO Freq",
+                slot+" LFO PW"
+            });
+        }
+        
+
+        params.push_back(std::make_unique<juce::AudioParameterChoice> (juce::ParameterID(paramID, 1), paramName, OutputOptions, 0));
+
+    
+
+
+        
+
         
         
         
@@ -301,7 +329,11 @@ juce::AudioProcessorValueTreeState::ParameterLayout WebMatrixSynthAudioProcessor
     
         
     }
-    
+    for(int x=1; x<5; x++){
+        for(int y=1; y<5; y++){
+            createGridParam(x, y, params);
+        }
+    }
     
     
     return { params.begin(), params.end() };

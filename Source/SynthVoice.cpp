@@ -82,16 +82,30 @@ void SynthVoice::populateMatrixValues(){
     
     //add dials to apvts parameters
     
-    for(int y=1; y<5; y++){
+    for(int y=0; y<4; y++){
+        
+        //check if osc is enabled, then do this
+        //debug the line below
+        
         float oscValue = InputOscillators[y].processSample(0.0f);
-        float scaledOSCValue = juce::jmap(oscValue, -1.0f, 1.0f, -5.0f, 5.0f);
+//        float scaledOSCValue = juce::jmap(oscValue, -1.0f, 1.0f, -5.0f, 5.0f);
         
         
-        for(int x=1; x<5; x++){
+        
+        for(int x=0; x<4; x++){
             //acess all the dial values one by one
-            float dialValue = apvts.getRawParameterValue(juce::String(x)+"x"+juce::String(y)+"Dials")->load();
+            float dialValue = apvts.getRawParameterValue(juce::String(x+1)+"x"+juce::String(y+1)+"Dial")->load();
             //scaling the rows value but them and adding the values to their space in the matrix
-            matrixValues[y][x] = scaledOSCValue * (dialValue/10);
+            
+            //fix this matrix.
+            matrixValues[y][x] = oscValue * (dialValue/10);
+            
+            
+//            DBG("Dial: " + juce::String(oscValue * (dialValue/10)));
+//            DBG("Scaled val: " + juce::String(scaledOSCValue * (dialValue/10)));
+
+            
+//            DBG("Matrix[" + juce::String(x+1) + "][" + juce::String(y+1) + "] = " + juce::String(matrixValues[y][x]));
         }
     }
 }
@@ -99,12 +113,16 @@ void SynthVoice::populateMatrixValues(){
 
 void SynthVoice::calcOutputVoltages(){
     
-    for(int y=1; y<5; y++){
-        currentColumn=0;
-        for(int x=1; x<5; x++){
-            currentColumn += matrixValues[x][y];
+    for(int y=0; y<4; y++){
+        for(int x=0; x<4; x++){
+            currentColumn += matrixValues[y][x];
+
         }
         outputVoltages[y] = currentColumn;
+        currentColumn=0;
+//        DBG("outputVoltages: " + juce::String(outputVoltages[y]));
+
+        
     }
 }
 
@@ -112,12 +130,10 @@ void SynthVoice::calcOutputVoltages(){
 void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int startSample, int numSamples)
 {
     jassert(isPrepared);
-//    populateMatrixValues();
-//    calcOutputVoltages();
-//    
-//    summedVoltage = 0.0f;
-
-
+    populateMatrixValues();
+    calcOutputVoltages();
+    
+    summedVoltage = 0.0f;
     
     //for the columns that have main output selected, sum up the values in that column
     //create an ossilator with the initilize function just being the varaible of the summed voltage values.
@@ -166,11 +182,10 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int 
                 }else if(currentWF == "Noise"){
                     
                     selectedOscillator.initialise([](float) {return juce::Random::getSystemRandom().nextFloat() * 2.0f - 1.0f;});
-                
                 }
             }
             
-            selectedOscillator.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
+//            selectedOscillator.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
 
         }
         
@@ -179,12 +194,16 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int 
         
         
         //Outputting sounds.
-        auto* outputSelectParam = dynamic_cast<juce::AudioParameterChoice*>(apvts.getParameter("Output"+juce::String(i+1)));
+        auto* outputSelectParam = dynamic_cast<juce::AudioParameterChoice*>(apvts.getParameter("Matrix_Output"+juce::String(i+1)));
         juce::String outputDropdown = outputSelectParam->getCurrentChoiceName();
         
         if(outputDropdown == "Main Output"){
-            
             summedVoltage+= outputVoltages[i];
+            
+            DBG("Summed Voltage: "+ juce::String(summedVoltage));
+
+            
+//            DBG("Summed Volts: "+ juce::String(summedVoltage));
         }
     }
     

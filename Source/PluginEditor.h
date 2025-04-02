@@ -32,7 +32,7 @@ public:
     
     void updateButtons(int buttonIndex, juce::String updateTo);
     void updateOutputBoxes(std::string, int);
-    void updateOutputOptions();
+    void updateOutputOptions(juce::String Slot, juce::String Module);
 
 private:
     // This reference is provided as a quick way for your editor to
@@ -47,7 +47,7 @@ private:
     
     juce::ComboBox inputBox1, inputBox2, inputBox3, inputBox4, outputBox1, outputBox2, outputBox3, outputBox4;
     
-    std::unordered_map<juce::String, std::unordered_map<juce::String, std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>>> sliderAttachments;
+//    std::unordered_map<juce::String, std::unordered_map<juce::String, std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>>> sliderAttachments;
     
     juce::Slider* dials[20] = {
         &dial_1x1, &dial_2x1, &dial_3x1, &dial_4x1,
@@ -66,16 +66,28 @@ private:
     };
     std::unique_ptr<OSCComponent> vcoComponent;
     
+    
+    std::map<juce::String, int> OutComboBoxIdToText;
+
+//    std::unordered_map<juce::String, int> OutComboBoxIdToText;
+
+    
     WebMatrixSynthAudioProcessor& audioProcessor;
+    
+    int boxID;
+    
+    juce::String boxIDString;
 
     
     using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+    using ComboBoxAttachment = juce::AudioProcessorValueTreeState::ComboBoxAttachment;
+
 //    Slot1_VCO_Freq
     
-    std::unique_ptr<SliderAttachment> Slot1_VCO_Freq;
-    std::unique_ptr<SliderAttachment> Slot1_VCO_PW;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> Slot1_VCO_WF;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> Slot1_VCO_VM;
+    std::vector<std::unique_ptr<SliderAttachment>> sliderAttachments;
+    std::unique_ptr<ComboBoxAttachment> Matrix_Output1, Matrix_Output2, Matrix_Output3, Matrix_Output4;
+
+    
 
     
 

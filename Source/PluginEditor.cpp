@@ -35,16 +35,42 @@ PluginEditor::PluginEditor (WebMatrixSynthAudioProcessor& p)
     addAndMakeVisible(myButton);  // Make the button visible in the UI
     
     
-    for (auto* dial : dials)  // Assuming `dials` is an array or vector of sliders
-    {
-        dial->setSliderStyle(juce::Slider::Rotary);
-        dial->setTextBoxStyle(juce::Slider::TextBoxRight, false, 60, 20);
-        
-        dial->setRange(0.0, 10.0, 0.1);
-
-        addAndMakeVisible(*dial);
-    }
+//    for (auto* dial : dials)  // Assuming `dials` is an array or vector of sliders
+//    {
+//        dial->setSliderStyle(juce::Slider::Rotary);
+//        dial->setTextBoxStyle(juce::Slider::TextBoxRight, false, 60, 20);
+//        
+//        dial->setRange(0.0, 10.0, 0.1);
+//
+//        addAndMakeVisible(*dial);
+//    }
     
+
+
+    for(int y=1; y<5; y++){
+        for(int x=1; x<5; x++){
+            
+            int index = (y - 1) * 4 + (x - 1);
+            dials[index]->setSliderStyle(juce::Slider::Rotary);
+            dials[index]->setTextBoxStyle(juce::Slider::TextBoxRight, false, 60, 20);
+
+            dials[index]->setRange(0.0, 10.0, 0.1);
+
+            addAndMakeVisible(*dials[index]);
+            
+            juce::String paramID = juce::String(x)+"x"+juce::String(y) + "Dial";
+            
+            sliderAttachments.push_back(std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+                apvts, paramID, *dials[index] ));
+
+        }
+    }
+        
+
+    //GENERATING ALL ITEMS FOR THE OUPUT BOXES
+    
+    
+
     
     for (auto* box : inputBoxes)  // Assuming `dials` is an array or vector of sliders
     {
@@ -69,16 +95,94 @@ PluginEditor::PluginEditor (WebMatrixSynthAudioProcessor& p)
         addAndMakeVisible(box);
     }
     
+    int id=1;
+    
+    OutComboBoxIdToText.insert(std::pair<juce::String, int>(" ", id));
+    id++;
+    
+    OutComboBoxIdToText.insert(std::pair<juce::String, int>("Main Output", id));
+    id++;
+
+    //add all the ids up here
+    for (int slots=1; slots<5; slots++){
+        juce::String slot = "Slot "+juce::String(slots);
+
+//        OutComboBoxIdToText[id] = slot+"_VCO_Freq";
+//        id++;
+//        OutComboBoxIdToText[id] = slot+"_VCO_PW";
+//        id++;
+//        OutComboBoxIdToText[id] = slot+"_LFO_Freq";
+//        id++;
+//        OutComboBoxIdToText[id] = slot+"_LFO_PW";
+//        id++;
+        
+        OutComboBoxIdToText.insert(std::pair<juce::String, int>(slot+"_VCO_Freq", id));
+        id++;
+        
+        OutComboBoxIdToText.insert(std::pair<juce::String, int>(slot+"_VCO_PW", id));
+        id++;
+        
+        OutComboBoxIdToText.insert(std::pair<juce::String, int>(slot+"_LFO_Freq", id));
+        id++;
+        
+        OutComboBoxIdToText.insert(std::pair<juce::String, int>(slot+"_LFO_PW", id));
+        id++;
+        
+        
+
+    }
+    
     for (auto* box : outputBoxes)  // Assuming `dials` is an array or vector of sliders
     {
+        id=1;
+        
+        box->addItem(" ", id);
+        id++;
+        
+        box->addItem("Main Output", id);
+        id++;
+        
+        for (int slots=1; slots<5; slots++){
+            juce::String slot = "Slot "+juce::String(slots);
+
+            box->addItem(slot+" VCO Freq", id);
+            box->setItemEnabled(id, false);
+            id++;
+            box->addItem(slot+" VCO PW", id);
+            box->setItemEnabled(id, false);
+
+            id++;
+            box->addItem(slot+" LFO Freq", id);
+            box->setItemEnabled(id, false);
+
+            id++;
+            box->addItem(slot+" LFO PW", id);
+            box->setItemEnabled(id, false);
+
+            id++;
+        }
+        
+
+        
+        
+        //Hide all options here.
+        
+        
+        
+        //add all items to each output box
         addAndMakeVisible(box);
     }
+    
+    Matrix_Output1 = std::make_unique<ComboBoxAttachment>(apvts, "Matrix_Output1", *outputBoxes[0]);
+    Matrix_Output2 = std::make_unique<ComboBoxAttachment>(apvts, "Matrix_Output2", *outputBoxes[1]);
+    Matrix_Output3 = std::make_unique<ComboBoxAttachment>(apvts, "Matrix_Output3", *outputBoxes[2]);
+    Matrix_Output4 = std::make_unique<ComboBoxAttachment>(apvts, "Matrix_Output4", *outputBoxes[3]);
     
     
     
     inputBox1.onChange = [this]() {
         updateButtons(0, inputBox1.getText());
-        updateOutputOptions();
+        updateOutputOptions("Slot 1", inputBox1.getText());
         
 //        DBG("Box1 selected text: " + inputBox1.getText());
         for (int i = 0; i < 4; i++) {
@@ -88,8 +192,8 @@ PluginEditor::PluginEditor (WebMatrixSynthAudioProcessor& p)
     
     inputBox2.onChange = [this]() {
         updateButtons(1, inputBox2.getText());
-        updateOutputOptions();
-        
+        updateOutputOptions("Slot 2", inputBox2.getText());
+
 //        DBG("Box2 selected text: " + inputBox2.getText());
         for (int i = 0; i < 4; i++) {
             std::cout << selectedModules[i] << std::endl;
@@ -98,8 +202,8 @@ PluginEditor::PluginEditor (WebMatrixSynthAudioProcessor& p)
     
     inputBox3.onChange = [this]() {
         updateButtons(2, inputBox3.getText());
-        updateOutputOptions();
-        
+        updateOutputOptions("Slot 3", inputBox3.getText());
+
 //        DBG("Box3 selected text: " + inputBox3.getText());
         for (int i = 0; i < 4; i++) {
             std::cout << selectedModules[i] << std::endl;
@@ -109,8 +213,8 @@ PluginEditor::PluginEditor (WebMatrixSynthAudioProcessor& p)
     
     inputBox4.onChange = [this]() {
         updateButtons(3, inputBox4.getText());
-        updateOutputOptions();
-        
+        updateOutputOptions("Slot 4", inputBox4.getText());
+
 //        DBG("Box4 selected text: " + inputBox4.getText());
         for (int i = 0; i < 4; i++) {
             std::cout << selectedModules[i] << std::endl;
@@ -139,41 +243,43 @@ PluginEditor::PluginEditor (WebMatrixSynthAudioProcessor& p)
 
 }
 
-void PluginEditor::updateOutputOptions()
+void PluginEditor::updateOutputOptions(juce::String Slot, juce::String Module)
 {
-    //OUTPUT BOXES
+    
+    
+    
     for (auto* box : outputBoxes)
     {
-        box->clear();
-    }
-    
-    int outputBoxItemID=1;
-
-    for (auto* box : outputBoxes)
-    {
-        box->addItem(" ", outputBoxItemID++);
-        box->addItem("Main Output", outputBoxItemID++);
-    }
-    
-    for (int i=0; i<4; i++){
-        curModule = selectedModules[i];
+        //hide all elements of that slot if "" if selected
         
-        if (curModule == "VCO"){
-            for (auto* box : outputBoxes)
-            {
-                box->addSectionHeading("(Slot: "+juce::String(i)+") VCO");
-                box->addItem("Frequency", outputBoxItemID++);
-                box->addItem("Pulse Width", outputBoxItemID++);
-            }
+        if (Module == " "){
             
-        }else if (curModule == "LFO"){
+            boxID = OutComboBoxIdToText[Slot+"_VCO_Freq"];
+            box->setItemEnabled(boxID, false);
             
-            for (auto* box : outputBoxes)
-            {
-                box->addSectionHeading("(Slot: "+juce::String(i)+" LFO");
-                box->addItem("Frequency", outputBoxItemID++);
-                box->addItem("Pulse Width", outputBoxItemID++);
-            }
+            boxID =  OutComboBoxIdToText[Slot+"_VCO_PW"];
+            box->setItemEnabled(boxID, false);
+
+            boxID = OutComboBoxIdToText[Slot+"_LFO_Freq"];
+            box->setItemEnabled(boxID, false);
+
+            boxID =  OutComboBoxIdToText[Slot+"_LFO_PW"];
+            box->setItemEnabled(boxID, false);
+            
+            box->repaint();
+          
+        }else{
+            
+            boxIDString = Slot+"_"+Module+"_Freq";
+            boxID = OutComboBoxIdToText[boxIDString];
+            box->setItemEnabled(boxID, true);
+            
+            boxIDString = Slot+"_"+Module+"_PW";
+            boxID = OutComboBoxIdToText[boxIDString];
+            box->setItemEnabled(boxID, true);
+            
+            box->repaint();
+            
         }
     }
 }
