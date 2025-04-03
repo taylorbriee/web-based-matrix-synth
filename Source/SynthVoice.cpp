@@ -100,12 +100,8 @@ void SynthVoice::populateMatrixValues(){
             //fix this matrix.
             matrixValues[y][x] = oscValue * (dialValue/10);
             
-            
-//            DBG("Dial: " + juce::String(oscValue * (dialValue/10)));
-//            DBG("Scaled val: " + juce::String(scaledOSCValue * (dialValue/10)));
+//            DBG(juce::String(x+1)+"x"+juce::String(y+1)+"Dial: "+ juce::String(matrixValues[y][x]));
 
-            
-//            DBG("Matrix[" + juce::String(x+1) + "][" + juce::String(y+1) + "] = " + juce::String(matrixValues[y][x]));
         }
     }
 }
@@ -115,12 +111,18 @@ void SynthVoice::calcOutputVoltages(){
     
     for(int y=0; y<4; y++){
         for(int x=0; x<4; x++){
-            currentColumn += matrixValues[y][x];
-
+            currentColumn += matrixValues[x][y];
         }
+        
         outputVoltages[y] = currentColumn;
         currentColumn=0;
-//        DBG("outputVoltages: " + juce::String(outputVoltages[y]));
+        
+        
+//        DBG("Output "+juce::String(y)+" Volt: "+ juce::String(outputVoltages[y]));
+
+        
+//        DBG("Output Volt: "+ juce::String(outputVoltages[y]));
+
 
         
     }
@@ -188,19 +190,16 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int 
         //check which dropdown has Main Output selected
         //then depending on which do pass voltage to that osc and process it to th
         
-        
-        
-    
-    // ✅ Step 1: Compute matrix values ONCE per block
 
-
-    // ✅ Step 2: Cache "Main Output" selections ONCE per block
     std::array<bool, 4> isMainOutput;
     for (int i = 0; i < 4; i++)
     {
         auto* outputSelectParam = dynamic_cast<juce::AudioParameterChoice*>(apvts.getParameter("Matrix_Output" + juce::String(i + 1)));
         juce::String outputDropdown = outputSelectParam->getCurrentChoiceName();
         isMainOutput[i] = (outputDropdown == "Main Output");
+        
+//        DBG("Output "+juce::String(i+1)+" choice: "+ juce::String(isMainOutput[i] ? "true" : "false"));
+
     }
 
     for (int sample = 0; sample < numSamples; ++sample)
@@ -212,9 +211,14 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int 
         
         for (int i = 0; i < 4; i++)
         {
+//            DBG("Output "+juce::String(i)+" Volt: "+ juce::String(outputVoltages[i]));
+            
             if (isMainOutput[i])
             {
                 summedVoltage += outputVoltages[i];
+//                DBG("Output Volt: "+ juce::String(outputVoltages[i]));
+//                DBG("Output "+juce::String(i)+" Volt: "+ juce::String(outputVoltages[i]));
+
             }
         }
 
@@ -227,10 +231,5 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int 
 
 
     
-//    for (int channel = 0; channel < outputBuffer.getNumChannels(); ++channel) {
-//        outputBuffer.addSample(channel, startSample + sample, audioSample);
-//    }
-    
-
     
 
