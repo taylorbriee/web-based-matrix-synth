@@ -66,6 +66,7 @@ void SynthVoice::prepareToPlay (double sampleRate, int samplesPerBlock, int outp
     for (int i=0; i<4; i++){
         InputOscillators[i].prepare(spec);
         InputOscillators[i].initialise([](float x) { return 0.0f; });
+        
     }
     
     
@@ -86,8 +87,11 @@ void SynthVoice::populateMatrixValues(){
         
         //check if osc is enabled, then do this
         //debug the line below
-        
         float oscValue = InputOscillators[y].processSample(0.0f);
+        
+        
+        
+        
 //        float scaledOSCValue = juce::jmap(oscValue, -1.0f, 1.0f, -5.0f, 5.0f);
         
         
@@ -129,6 +133,46 @@ void SynthVoice::calcOutputVoltages(){
 }
 
 
+void SynthVoice::OSC_Creation(int i, const juce::String &slot, juce::String Module) {
+   
+    bool isEnabled = apvts.getRawParameterValue(slot+"_"+Module+"_isEnabled")->load();
+
+    juce::dsp::Oscillator<float>& selectedOscillator = InputOscillators.at(i);
+
+
+    if (isEnabled){
+        
+        auto* waveformParam = dynamic_cast<juce::AudioParameterChoice*>(apvts.getParameter(slot+"_"+Module+"_WF"));
+        juce::String currentWF = waveformParam->getCurrentChoiceName();
+        
+        //get that ossilators parameters
+        float freq = apvts.getRawParameterValue(slot+"_"+Module+"_Freq")->load();
+        selectedOscillator.setFrequency(freq);
+        
+        
+        if (currentWF != previousWaveforms[i]){
+            previousWaveforms[i] = currentWF;
+            
+            if (currentWF == "Sine"){
+                
+                selectedOscillator.initialise([](float x) { return std::sin (x); });
+                
+            }else if(currentWF == "Saw"){
+                
+                selectedOscillator.initialise([](float x) {return x / juce::MathConstants<float>::pi;});
+                
+            }else if(currentWF == "Square"){
+                
+                selectedOscillator.initialise([](float x) {return x < 0.0f ? -1.0f : 1.0f;} );
+                
+            }else if(currentWF == "Noise"){
+                
+                selectedOscillator.initialise([](float) {return juce::Random::getSystemRandom().nextFloat() * 2.0f - 1.0f;});
+            }
+        }
+    }
+}
+
 void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int startSample, int numSamples)
 {
     jassert(isPrepared);
@@ -145,46 +189,19 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int 
         
     for (int i=0; i<4; i++){
         
-        juce::dsp::Oscillator<float>& selectedOscillator = InputOscillators.at(i);
         //check is enabled
         juce::String slot = "Slot" + juce::String(i+1);
-        bool isEnabled = apvts.getRawParameterValue(slot+"_VCO_isEnabled")->load();
         
-        if (isEnabled){
-            
-            
-            auto* waveformParam = dynamic_cast<juce::AudioParameterChoice*>(apvts.getParameter(slot+"_VCO_WF"));
-            juce::String currentWF = waveformParam->getCurrentChoiceName();
-            
-            //get that ossilators parameters
-            float freq = apvts.getRawParameterValue(slot+"_VCO_Freq")->load();
-            selectedOscillator.setFrequency(freq);
-            
-            
-            if (currentWF != previousWaveforms[i]){
-                previousWaveforms[i] = currentWF;
-                
-                if (currentWF == "Sine"){
-                    
-                    selectedOscillator.initialise([](float x) { return std::sin (x); });
-                    
-                }else if(currentWF == "Saw"){
-                    
-                    selectedOscillator.initialise([](float x) {return x / juce::MathConstants<float>::pi;});
-                    
-                }else if(currentWF == "Square"){
-                    
-                    selectedOscillator.initialise([](float x) {return x < 0.0f ? -1.0f : 1.0f;} );
-                    
-                }else if(currentWF == "Noise"){
-                    
-                    selectedOscillator.initialise([](float) {return juce::Random::getSystemRandom().nextFloat() * 2.0f - 1.0f;});
-                }
-            }
-            
-            //            selectedOscillator.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
-            
-        }
+        
+//        bool LFOisEnabled = apvts.getRawParameterValue(slot+"_LFO_isEnabled")->load();
+
+
+        OSC_Creation(i, slot, "VCO");
+        OSC_Creation(i, slot, "LFO");
+        
+        
+
+        
     }
         
         //check which dropdown has Main Output selected
@@ -198,9 +215,18 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int 
         juce::String outputDropdown = outputSelectParam->getCurrentChoiceName();
         isMainOutput[i] = (outputDropdown == "Main Output");
         
+        //append to outputChoicesArray here, make sure you are converting the combo box text to parameter ID before you store it.
+        
+        
+        //we need the box id to get the corripsonding parameter id from OutComboBoxIdToText.
+        
+//        outputSelections[i] = 
+        
 //        DBG("Output "+juce::String(i+1)+" choice: "+ juce::String(isMainOutput[i] ? "true" : "false"));
 
     }
+    
+    //Itterate over
 
     for (int sample = 0; sample < numSamples; ++sample)
     {
@@ -209,6 +235,8 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int 
         populateMatrixValues();
         calcOutputVoltages();
         
+        
+        //looping over outputs
         for (int i = 0; i < 4; i++)
         {
 //            DBG("Output "+juce::String(i)+" Volt: "+ juce::String(outputVoltages[i]));
@@ -219,7 +247,25 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int 
 //                DBG("Output Volt: "+ juce::String(outputVoltages[i]));
 //                DBG("Output "+juce::String(i)+" Volt: "+ juce::String(outputVoltages[i]));
 
+            
+            
             }
+            
+//            auto& param = *apvts.getParameter("YourParameterID");
+//            juce::NormalisableRange<float> range = param.getNormalisableRange();
+//
+//            float minValue = range.start;
+//            float maxValue = range.end;
+//            
+//            float minFreq = 20.0f;  // Minimum frequency
+//            float maxFreq = 5000.0f; // Maximum frequency
+//
+//            float voltageValue = -0.5f; // Example input in range [-1, 1]
+//            float scaledFreq = minFreq + ((voltageValue + 1.0f) / 2.0f) * (maxFreq - minFreq);
+//
+//            DBG("Scaled Frequency: " + juce::String(scaledFreq));
+
+            
         }
 
         float audioSample = juce::jlimit(-1.0f, 1.0f, summedVoltage);

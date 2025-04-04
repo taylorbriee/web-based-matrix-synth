@@ -314,20 +314,6 @@ void PluginEditor::updateButtons(int index, juce::String updateTo)
         
         apvts.getParameter("Slot"+juce::String(index+1)+"_VCO_isEnabled")->setValueNotifyingHost(true);
         moduleComponents[index] = std::make_unique<OSCComponent>(apvts, juce::String("Slot"+juce::String(index+1)));
-        if (auto* oscComponent = dynamic_cast<OSCComponent*>(moduleComponents[index].get()))
-        {
-             
-
-//
-//                oscComponent->pulseWidthDial;
-//                oscComponent->inputModeBox;
-//                oscComponent->waveTypeBox;
-//                oscComponent->oscVoices;
-        }
-        else
-        {
-            DBG("Failed to cast to OSCComponent");
-        }
         
 
     
@@ -345,15 +331,14 @@ void PluginEditor::updateButtons(int index, juce::String updateTo)
         };
         
         moduleButtons[index]= std::move(newButton);
-
-
-
     }
+    
     
     else if (updateTo == "LFO")
     {
         
-        
+        apvts.getParameter("Slot"+juce::String(index+1)+"_LFO_isEnabled")->setValueNotifyingHost(true);
+
         moduleComponents[index] = std::make_unique<LFOComponent>(apvts, juce::String("Slot"+juce::String(index+1)));
         
         audioProcessor.addModule("LFO", index);
@@ -368,10 +353,9 @@ void PluginEditor::updateButtons(int index, juce::String updateTo)
         };
         
         moduleButtons[index]= std::move(newButton);
-
-        
-
     }
+    
+    
     //check if previous was VCO
     else if (updateTo == " ")
     {

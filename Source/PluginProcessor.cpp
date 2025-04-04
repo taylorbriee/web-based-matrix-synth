@@ -289,6 +289,11 @@ juce::AudioProcessorValueTreeState::ParameterLayout WebMatrixSynthAudioProcessor
         
         paramID = slot+"_LFO_WF";
         params.push_back(std::make_unique<juce::AudioParameterChoice> (juce::ParameterID(paramID, 1), slot+" LFO Waveform", juce::StringArray {"Sine","Saw","Square","Noise"}, 0));
+        
+        
+        
+        paramID = slot+"_LFO_isEnabled";
+        params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID(paramID, 1), slot+" LFO Enabled", false));
 
         
         //loop for outputs
@@ -305,12 +310,16 @@ juce::AudioProcessorValueTreeState::ParameterLayout WebMatrixSynthAudioProcessor
         for (int slots=1; slots<5; slots++){
             
             
+            
+            
+            
+            
             juce::String slot = "Slot "+juce::String(slots);
             OutputOptions.addArray(juce::StringArray {
-                slot+" VCO Freq",
-                slot+" VCO PW",
-                slot+" LFO Freq",
-                slot+" LFO PW"
+                slot+"_VCO_Freq",
+                slot+"_VCO_PW",
+                slot+"_LFO_Freq",
+                slot+"_LFO_PW"
             });
         }
         

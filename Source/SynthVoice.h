@@ -28,7 +28,9 @@ class SynthVoice : public juce::SynthesiserVoice
     void controllerMoved (int controllerNumber, int newControllerValue) override;
     void pitchWheelMoved (int newPitchWheelValue) override;
     void prepareToPlay (double sampleRate, int samplesPerBlock, int outputChannels);
-    void renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int startSample, int numSamples) override;
+    void OSC_Creation(int i, const juce::String &slot, juce::String Module);
+    
+void renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int startSample, int numSamples) override;
     void paramUpdateVoice(const float freq);
     float voltageToFrequency(float voltage, float referenceFrequency = 440.0f);
     void populateMatrixValues();
@@ -48,12 +50,19 @@ class SynthVoice : public juce::SynthesiserVoice
     juce::dsp::Gain<float> gain;
     bool isPrepared{false};
     std::vector<juce::dsp::Oscillator<float>> InputOscillators { 4 };
+    
+    std::vector<juce::dsp::Oscillator<float>> InputLFOs { 4 };
+
+    
     float summedVoltage;
     
     std::vector<float> outputVoltages {0.f, 0.f, 0.f, 0.f};
     float currentColumn = 0.f;
 
     std::vector<juce::String> previousWaveforms {"","","",""};
+    std::vector<juce::String> outputSelections {"","","",""};
+
+    
     juce::AudioProcessorValueTreeState& apvts;
     
     std::vector<std::vector<float>> matrixValues;
