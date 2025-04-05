@@ -314,7 +314,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout WebMatrixSynthAudioProcessor
             
             
             
-            juce::String slot = "Slot "+juce::String(slots);
+            juce::String slot = "Slot"+juce::String(slots);
             OutputOptions.addArray(juce::StringArray {
                 slot+"_VCO_Freq",
                 slot+"_VCO_PW",

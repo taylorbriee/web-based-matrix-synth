@@ -51,9 +51,8 @@ void renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int startSample,
     bool isPrepared{false};
     std::vector<juce::dsp::Oscillator<float>> InputOscillators { 4 };
     
-    std::vector<juce::dsp::Oscillator<float>> InputLFOs { 4 };
 
-    
+    int oscIndex;
     float summedVoltage;
     
     std::vector<float> outputVoltages {0.f, 0.f, 0.f, 0.f};
@@ -61,6 +60,7 @@ void renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int startSample,
 
     std::vector<juce::String> previousWaveforms {"","","",""};
     std::vector<juce::String> outputSelections {"","","",""};
+    juce::String output;
 
     
     juce::AudioProcessorValueTreeState& apvts;

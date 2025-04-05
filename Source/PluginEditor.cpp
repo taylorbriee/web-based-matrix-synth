@@ -247,6 +247,11 @@ void PluginEditor::updateOutputOptions(juce::String Slot, juce::String Module)
 {
     
     
+    //hide then make all the buttons visible
+    
+    
+    
+    
     
     for (auto* box : outputBoxes)
     {
