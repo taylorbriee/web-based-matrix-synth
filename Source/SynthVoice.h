@@ -30,7 +30,7 @@ class SynthVoice : public juce::SynthesiserVoice
     void prepareToPlay (double sampleRate, int samplesPerBlock, int outputChannels);
     void OSC_Creation(int i, const juce::String &slot, juce::String Module);
     
-void renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int startSample, int numSamples) override;
+    void renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int startSample, int numSamples) override;
     void paramUpdateVoice(const float freq);
     float voltageToFrequency(float voltage, float referenceFrequency = 440.0f);
     void populateMatrixValues();
@@ -50,6 +50,10 @@ void renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int startSample,
     juce::dsp::Gain<float> gain;
     bool isPrepared{false};
     std::vector<juce::dsp::Oscillator<float>> InputOscillators { 4 };
+    std::array<juce::String, 4> isMainOutput;
+    std::array<float, 4> vcoModValues;
+
+
     
 
     int oscIndex;

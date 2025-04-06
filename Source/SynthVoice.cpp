@@ -85,8 +85,7 @@ void SynthVoice::populateMatrixValues(){
     
     for(int y=0; y<4; y++){
         
-        //check if osc is enabled, then do this
-        //debug the line below
+
         float oscValue = InputOscillators[y].processSample(0.0f);
         
         
@@ -228,12 +227,13 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int 
         //then depending on which do pass voltage to that osc and process it to th
         
 
-    std::array<juce::String, 4> isMainOutput;
     for (int i = 0; i < 4; i++)
     {
         auto* outputSelectParam = dynamic_cast<juce::AudioParameterChoice*>(apvts.getParameter("Matrix_Output" + juce::String(i + 1)));
         juce::String outputDropdown = outputSelectParam->getCurrentChoiceName();
         isMainOutput[i] = outputDropdown;
+        
+        vcoModValues[i] = apvts.getRawParameterValue("Slot"+juce::String(i + 1)+"_VCO_Freq_Mod")->load();
         
 //        DBG("Output "+ juce::String(i)+ juce::String(outputDropdown));
         
@@ -270,11 +270,7 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int 
             if (isMainOutput[i] == "Main Output")
             {
                 summedVoltage += outputVoltages[i];
-//                DBG("Output Volt: "+ juce::String(outputVoltages[i]));
-//                DBG("Output "+juce::String(i)+" Volt: "+ juce::String(outputVoltages[i]));
 
-            
-            
             }
             
             else if (isMainOutput[i].contains("_VCO_Freq")){
@@ -282,7 +278,6 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int 
                 
 //                DBG("Output Volt: "+ juce::String(outputVoltages[i]));
 
-                float convertedFreq = convertVoltageToFrequency(outputVoltages[i]);
                 
                 juce::String text = isMainOutput[i]; // Example: "Slot1_VCO_Freq"
 
@@ -299,40 +294,28 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int 
 //                    juce::String(InputOscillators[oscIndex - 1].getFrequency()));
 
                 float currentFreq = InputOscillators[oscIndex-1].getFrequency();
+                float currentDepthParam = vcoModValues[i];
+                float currentColumnSig = outputVoltages[i];
+                
                 
                 
 //                DBG("currentFreq: "+juce::String(currentFreq));
+                
+//                float convertedFreq = convertVoltageToFrequency(outputVoltages[i]);
+
+
+                float modFreq = currentFreq + (currentColumnSig * currentDepthParam);
+                float limitedFreq = juce::jlimit(0.0f, 5915.0f, modFreq);
+                
 //                DBG("convertedFreq: "+juce::String(convertedFreq));
 
-
-                float modFreq = currentFreq+convertedFreq;
-                float limitedFreq = juce::jlimit(0.0f, 5915.0f, modFreq);
                 
 //                DBG("currentFreq: "+juce::String(limitedFreq));
 
 //                DBG("Limited freq: "+juce::String(limitedFreq));
                 InputOscillators[oscIndex-1].setFrequency(limitedFreq);
                 
-                // get spc
-                
-                
             }
-            
-//            auto& param = *apvts.getParameter("YourParameterID");
-//            juce::NormalisableRange<float> range = param.getNormalisableRange();
-//
-//            float minValue = range.start;
-//            float maxValue = range.end;
-//            
-//            float minFreq = 20.0f;  // Minimum frequency
-//            float maxFreq = 5000.0f; // Maximum frequency
-//
-//            float voltageValue = -0.5f; // Example input in range [-1, 1]
-//            float scaledFreq = minFreq + ((voltageValue + 1.0f) / 2.0f) * (maxFreq - minFreq);
-//
-//            DBG("Scaled Frequency: " + juce::String(scaledFreq));
-
-            
         }
 
         float audioSample = juce::jlimit(-1.0f, 1.0f, summedVoltage);

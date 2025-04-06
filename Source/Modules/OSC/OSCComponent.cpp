@@ -51,7 +51,7 @@ void OSCComponent::resized()
     titleArea = window.removeFromTop(60);
     
     addAndMakeVisible(freqDial);
-    addAndMakeVisible(pulseWidthDial);
+    addAndMakeVisible(freqModDial);
     
 
     
@@ -60,23 +60,22 @@ void OSCComponent::resized()
     auto topRightArea = topLeftArea;
     
     auto freqLabelSpace = topLeftDialBounds.removeFromBottom(40);
-    auto pulseWidthLabelSpace = topRightArea.removeFromBottom(40);
+    auto FreqModLabelSpace = topRightArea.removeFromBottom(40);
     
     freqLabel.setBounds(freqLabelSpace);
-    pulseWidthLabel.setBounds(pulseWidthLabelSpace);
+    freqModLabel.setBounds(FreqModLabelSpace);
     
     freqLabel.setJustificationType(juce::Justification::centred);
-    pulseWidthLabel.setJustificationType(juce::Justification::centred);
+    freqModLabel.setJustificationType(juce::Justification::centred);
 
     
     topLeftDialBounds = topLeftDialBounds;
     
-    pulseWidthDial.setSliderStyle(juce::Slider::Rotary);
-    pulseWidthDial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 20);
-    pulseWidthDial.setBounds(topRightArea);
+    freqModDial.setSliderStyle(juce::Slider::Rotary);
+    freqModDial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 20);
+    freqModDial.setBounds(topRightArea);
     
-    pulseWidthDial.setTextValueSuffix(" %");
-    pulseWidthDial.setRange(0.1, 10.0, 0.1);
+    freqModDial.setRange(0.0, 1000.0, 5.0);
     
     freqDial.setSliderStyle(juce::Slider::Rotary);
     freqDial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 80, 20);
@@ -121,10 +120,10 @@ void OSCComponent::resized()
     };
 
     addAndMakeVisible(freqLabel);
-    addAndMakeVisible(pulseWidthLabel);
+    addAndMakeVisible(freqModLabel);
     
     freqLabel.setText("Frequency", juce::dontSendNotification);
-    pulseWidthLabel.setText("Pulse Width", juce::dontSendNotification);
+    freqModLabel.setText("Frequency Modulation", juce::dontSendNotification);
     
     
     
@@ -143,9 +142,9 @@ void OSCComponent::resized()
     
     
     juce::String Freq_Param = slot+"_VCO_Freq";
-    juce::String PW_Param = slot+"_VCO_PW";
+    juce::String Freq_Mod_Param = slot+"_VCO_Freq_Mod";
     VCO_Freq_Attach = std::make_unique<SliderAttachment>(apvts, Freq_Param, freqDial);
-    VCO_PW_Attach = std::make_unique<SliderAttachment>(apvts, PW_Param, pulseWidthDial);
+    VCO_Freq_Mod_Attach = std::make_unique<SliderAttachment>(apvts, Freq_Mod_Param, freqModDial);
     
     
  
@@ -157,11 +156,11 @@ void OSCComponent::loadState()
         freqDial.setValue(vcoState.getProperty("freq"));
     
     if (vcoState.hasProperty("pulseWidth"))
-        pulseWidthDial.setValue(vcoState.getProperty("pulseWidth"));
+        freqModDial.setValue(vcoState.getProperty("pulseWidth"));
 }
 
 void OSCComponent::saveState()
 {
     vcoState.setProperty("freq", freqDial.getValue(), nullptr);
-    vcoState.setProperty("pulseWidth", pulseWidthDial.getValue(), nullptr);
+    vcoState.setProperty("pulseWidth", freqModDial.getValue(), nullptr);
 }

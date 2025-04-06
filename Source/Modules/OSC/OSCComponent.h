@@ -28,7 +28,7 @@ public:
     void loadState() override;
     void saveState() override;
     
-    juce::Slider pulseWidthDial, freqDial;
+    juce::Slider freqModDial, freqDial;
     juce::ComboBox waveTypeBox, oscVoices;
     
 private:
@@ -36,7 +36,7 @@ private:
     juce::AudioProcessorValueTreeState& apvts;
     
     juce::String slot;    
-    juce::Label freqLabel, pulseWidthLabel;
+    juce::Label freqLabel, freqModLabel;
     
     juce::TextButton backButton;
     
@@ -44,7 +44,7 @@ private:
     
     juce::ValueTree vcoState { "VCO" };
     
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> VCO_Freq_Attach, VCO_PW_Attach;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> VCO_Freq_Attach, VCO_Freq_Mod_Attach;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> VCO_WF_Attach, VCO_VM_Attach;
     
     //                Slot1_VCO_Freq

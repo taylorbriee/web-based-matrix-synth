@@ -86,11 +86,7 @@ void LFOComponent::resized()
     freqDial.setRange(0.0001, 1024, 0.0001);
     
     
-    using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
-    
-    juce::String paramID = slot+"_VCO_Freq";
-    auto Slot1_VCO_Freq = std::make_unique<SliderAttachment>(apvts, paramID, freqDial);
-    
+
     
     
     
