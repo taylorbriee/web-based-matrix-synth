@@ -293,9 +293,9 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int 
 //                DBG("Checking Frequency of osc " + juce::String(oscIndex - 1) + ": " +
 //                    juce::String(InputOscillators[oscIndex - 1].getFrequency()));
 
-                float currentFreq = InputOscillators[oscIndex-1].getFrequency();
-                float currentDepthParam = vcoModValues[i];
-                float currentColumnSig = outputVoltages[i];
+                currentFreq = InputOscillators[oscIndex-1].getFrequency();
+                currentDepthParam = vcoModValues[oscIndex-1];
+                currentColumnSig = outputVoltages[i];
                 
                 
                 
@@ -304,8 +304,11 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer< float > &outputBuffer, int 
 //                float convertedFreq = convertVoltageToFrequency(outputVoltages[i]);
 
 
-                float modFreq = currentFreq + (currentColumnSig * currentDepthParam);
-                float limitedFreq = juce::jlimit(0.0f, 5915.0f, modFreq);
+                
+                float modFreq = (currentDepthParam / 100.0f) * currentColumnSig * 1000.0;
+
+                modFreq = currentFreq + (currentColumnSig * currentDepthParam);
+                limitedFreq = juce::jlimit(0.0f, 5915.0f, modFreq);
                 
 //                DBG("convertedFreq: "+juce::String(convertedFreq));
 

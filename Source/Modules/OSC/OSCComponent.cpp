@@ -75,7 +75,7 @@ void OSCComponent::resized()
     freqModDial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 20);
     freqModDial.setBounds(topRightArea);
     
-    freqModDial.setRange(0.0, 1000.0, 5.0);
+    freqModDial.setRange(-100.0, 100.0, 5.0);
     
     freqDial.setSliderStyle(juce::Slider::Rotary);
     freqDial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 80, 20);

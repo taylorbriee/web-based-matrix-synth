@@ -264,16 +264,17 @@ juce::AudioProcessorValueTreeState::ParameterLayout WebMatrixSynthAudioProcessor
         paramID = slot+"_VCO_isEnabled";
         params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID(paramID, 1), slot+" Oscillator Enabled", false));
 
-
+        
         paramID = slot+"_VCO_Freq";
-        params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" VCO Frequency", juce::NormalisableRange<float> { 0.0f, 5915.0f, 0.01f }, 0.0f));
+        params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" VCO Frequency", juce::NormalisableRange<float> {0.01f, 5915.0f, 0.0f, 0.25f}, 0.0f));
 
         paramID = slot+"_VCO_PW";
         params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" VCO Pulse Width", juce::NormalisableRange<float> { 0.0f, 100.0f, 0.01f }, 0.0f));
         
         
         paramID = slot+"_VCO_Freq_Mod";
-        params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" VCO Frequency Modulation", juce::NormalisableRange<float> { 0.0f, 1000.0f, 5.0f }, 0.0f));
+        params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" VCO Frequency Modulation", juce::NormalisableRange<float> { -100.0f, 100.0f, 0.01f }, 0.0f));
+        
         
         
         paramID = slot+"_VCO_WF";
@@ -284,8 +285,9 @@ juce::AudioProcessorValueTreeState::ParameterLayout WebMatrixSynthAudioProcessor
         params.push_back(std::make_unique<juce::AudioParameterChoice> (juce::ParameterID(paramID, 1), slot+" VCO Voice Mode", juce::StringArray {"monophonic", "polyphonic"}, 0));
         
         
+
         paramID = slot+"_LFO_Freq";
-        params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" LFO Frequency", juce::NormalisableRange<float> { 0.0f, 1024.0f, 0.0001f }, 0.0f, "Hz"));
+        params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" LFO Frequency", juce::NormalisableRange<float> {0.01f, 1024.0f, 0.0f, 0.25f}, 0.0f, "Hz"));
         
         
         paramID = slot+"_LFO_PW";

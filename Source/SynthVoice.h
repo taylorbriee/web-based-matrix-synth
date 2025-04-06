@@ -38,7 +38,11 @@ class SynthVoice : public juce::SynthesiserVoice
     
     
     private:
-    
+    float currentFreq;
+    float currentDepthParam;
+    float currentColumnSig;
+    float modFreq;
+    float limitedFreq;
 
     
     std::vector<float> values;

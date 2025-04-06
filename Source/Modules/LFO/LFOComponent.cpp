@@ -85,7 +85,6 @@ void LFOComponent::resized()
     freqDial.setTextValueSuffix(" Hz");
     freqDial.setRange(0.0001, 1024, 0.0001);
     
-    
 
     
     
