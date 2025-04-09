@@ -19,7 +19,7 @@
 class LFOComponent : public BaseComponent
 {
 public:
-    LFOComponent();
+    LFOComponent(juce::AudioProcessorValueTreeState& apvts, juce::String slot);
     ~LFOComponent() override;
 
     void paint (juce::Graphics&) override;
@@ -28,13 +28,20 @@ public:
     void loadState() override;
     void saveState() override;
     
-private:
     juce::Slider pulseWidthDial, freqDial;
     juce::ComboBox waveTypeBox;
     
-    juce::TextButton backButton;
+private:
     
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> LFO_Freq_Attach, LFO_PW_Attach;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> LFO_WF_Attach;
+    
+    juce::String slot;
+    juce::AudioProcessorValueTreeState& apvts;
+    
+
     juce::Label freqLabel, pulseWidthLabel;
+    juce::TextButton backButton;
     
     juce::Rectangle<int> window, titleArea;
     

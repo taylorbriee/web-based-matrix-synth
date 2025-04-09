@@ -16,11 +16,10 @@
 
 
 //==============================================================================
-LFOComponent::LFOComponent()
+LFOComponent::LFOComponent(juce::AudioProcessorValueTreeState& apvts, juce::String slot)
+    : apvts(apvts), slot(slot)
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
-//    DBG("LFOComponent Constructor Called");
+
 
 }
 
@@ -51,13 +50,13 @@ void LFOComponent::paint (juce::Graphics& g)
 void LFOComponent::resized()
 {
     
+
     window = getLocalBounds();
     
     titleArea = window.removeFromTop(60);
     
     addAndMakeVisible(freqDial);
     addAndMakeVisible(pulseWidthDial);
-    
     
     
 
@@ -85,6 +84,8 @@ void LFOComponent::resized()
     freqDial.setSkewFactor(0.3);
     freqDial.setTextValueSuffix(" Hz");
     freqDial.setRange(0.0001, 1024, 0.0001);
+    
+
     
     
     
@@ -130,6 +131,20 @@ void LFOComponent::resized()
     freqLabel.setText("Frequency", juce::dontSendNotification);
     pulseWidthLabel.setText("Pulse Width", juce::dontSendNotification);
 
+    
+    
+    using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+    using ComboBoxAttachment = juce::AudioProcessorValueTreeState::ComboBoxAttachment;
+    
+    
+    
+    juce::String Freq_Param = slot+"_LFO_Freq";
+    juce::String PW_Param = slot+"_LFO_PW";
+    juce::String WF_Param = slot+"_LFO_WF";
+    
+    LFO_Freq_Attach = std::make_unique<SliderAttachment>(apvts, Freq_Param, freqDial);
+    LFO_PW_Attach = std::make_unique<SliderAttachment>(apvts, PW_Param, pulseWidthDial);
+    LFO_WF_Attach = std::make_unique<ComboBoxAttachment>(apvts, WF_Param, waveTypeBox);
  
 }
 

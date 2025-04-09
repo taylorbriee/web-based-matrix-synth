@@ -19,7 +19,7 @@
 class OSCComponent : public BaseComponent
 {
 public:
-    OSCComponent();
+    OSCComponent(juce::AudioProcessorValueTreeState& apvts, juce::String slot);
     ~OSCComponent() override;
 
     void paint (juce::Graphics&) override;
@@ -28,18 +28,44 @@ public:
     void loadState() override;
     void saveState() override;
     
+    juce::Slider freqModDial, freqDial;
+    juce::ComboBox waveTypeBox, oscVoices;
+    
 private:
-    juce::Slider pulseWidthDial, freqDial;
-    juce::ComboBox inputModeBox, waveTypeBox, oscVoices;
+
+    juce::AudioProcessorValueTreeState& apvts;
+    
+    juce::String slot;    
+    juce::Label freqLabel, freqModLabel;
     
     juce::TextButton backButton;
-    
-    juce::Label freqLabel, pulseWidthLabel;
     
     juce::Rectangle<int> window, titleArea;
     
     juce::ValueTree vcoState { "VCO" };
-
+    
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> VCO_Freq_Attach, VCO_Freq_Mod_Attach;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> VCO_WF_Attach, VCO_VM_Attach;
+    
+    //                Slot1_VCO_Freq
+    //                Slot1_VCO_PW
+    //                Slot1_VCO_WF
+    //                Slot1_VCO_Inputs
+    //                Slot1_VCO_VM
+    
+//    std::unique_ptr<>
+    
+    
+//    params.push_back(std::make_unique<juce::AudioParameterChoice> (juce::ParameterID(paramID, 1), slot+" VCO Waveform", juce::StringArray {"Sine","Saw","Square","Noise"}, 0));
+//    
+//    paramID = slot+"_VCO_Inputs";
+//    
+//    params.push_back(std::make_unique<juce::AudioParameterChoice> (juce::ParameterID(paramID, 1), slot+" VCO Inputs", juce::StringArray {"inc MIDI", "Drone"}, 0));
+//    
+//    
+//    paramID = slot+"_VCO_VM";
+//    
+//    params.push_back(std::make_unique<juce::AudioParameterChoice> (juce::ParameterID(paramID, 1), slot+" VCO Voice Mode", juce::StringArray {"monophonic", "polyphonic"}, 0));
 
     
     

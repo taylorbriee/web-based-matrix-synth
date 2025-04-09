@@ -23,11 +23,11 @@ WebMatrixSynthAudioProcessor::WebMatrixSynthAudioProcessor()
 #endif
     , apvts(*this, nullptr, "Parameters", createParams())
 {
-    synth.addSound (new SynthSound());
-//    synth.addVoice (new SynthVoice());
-    
-    for (int i = 0; i < 8; ++i) // 8 voices
-        synth.addVoice(new SynthVoice());
+    synth.addSound(new SynthSound());
+    synth.addVoice(new SynthVoice(apvts));
+//    for (int i = 0; i < 8; ++i){
+//        synth.addVoice(new SynthVoice());
+//    }
 }
 
 WebMatrixSynthAudioProcessor::~WebMatrixSynthAudioProcessor()
@@ -146,6 +146,24 @@ bool WebMatrixSynthAudioProcessor::isBusesLayoutSupported (const BusesLayout& la
 }
 #endif
 
+
+//void WebMatrixSynthAudioProcessor::processBlock(){
+//    
+//}
+
+
+//void WebMatrixSynthAudioProcessor::addVoice(juce::String slot){
+//    for (int i = 0; i < 4; ++i)
+//    {
+//        if (OSCSlots[i]=="")
+//        {
+//            OSCSlots[i] = slot;
+//            break; // Stop after adding
+//        }
+//    }
+//    synth.addVoice(new SynthVoice());
+//}
+
 void WebMatrixSynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
 
@@ -157,30 +175,7 @@ void WebMatrixSynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-
-    //original issue here with increment post fix
-    for (int i=0; i<synth.getNumSounds(); ++i){
-        if (auto voice = dynamic_cast<juce::SynthesiserVoice* >(synth.getVoice(i))){
-            // Osc controls
-            // ADSR
-            // LFO
-            
-            
-            
-            
-            //psudocode
-            
-            //loop through all the modules getting their name i.e. (OSC 1, VCO 2)
-            //get modules here 
-            
-//            if (module == "osc"){
-//                apvts.get
-//            }
-            
-            
-            
-        }
-    }
+    
     
     synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
@@ -189,6 +184,15 @@ void WebMatrixSynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
 
         // ..do something to the data...
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
 
 //==============================================================================
@@ -223,27 +227,31 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
     return new WebMatrixSynthAudioProcessor();
 }
 
+void WebMatrixSynthAudioProcessor::createGridParam(int x, int y, std::vector<std::unique_ptr<juce::RangedAudioParameter>>& params)
+{
+    juce::String dialDimensions = juce::String(x)+"x"+juce::String(y);
+    juce::String paramID = dialDimensions+"Dial";
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), dialDimensions+" Dial", juce::NormalisableRange<float> { 0.0f, 10.0f, 0.01f }, 0.0f));
+}
+
 
 juce::AudioProcessorValueTreeState::ParameterLayout WebMatrixSynthAudioProcessor::createParams()
 {
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
     
     
-    //LFO:
-    
-    //Frequency
-    //Pulse Width
-    //Sine, Saw, Square, Noise
 
+    juce::String slot;
     
     juce::String paramID;
-//
-//    params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("paramID", 1), " VCO Frequency", juce::NormalisableRange<float> { 0.0f, 1000.0f, 0.01f }, 0.0f, "Hz"));
     
-//    params.push_back(std::make_unique<juce::AudioParameterChoice> (juce::ParameterID(paramID, 1), " VCO Waveform", juce::StringArray {"Sine","Saw","Square","Noise"}, 0));
-
+    
     
     for(int i=1; i<5; i++){
+        
+        
+        slot = "Slot" + juce::String(i);
+
         
         //VCO:
         //Frequency
@@ -252,60 +260,95 @@ juce::AudioProcessorValueTreeState::ParameterLayout WebMatrixSynthAudioProcessor
         //inc MIDI, Drone
         //monophonic, polyphonic
         
-        juce::String slot = "Slot" + juce::String(i);
 
-        //VCO:
+        paramID = slot+"_VCO_isEnabled";
+        params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID(paramID, 1), slot+" Oscillator Enabled", false));
 
-        paramID = slot+"_VCO_"+"Freq";
         
-        params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" VCO Frequency", juce::NormalisableRange<float> { 0.0f, 1000.0f, 0.01f }, 0.0f, "Hz"));
-        
-        
-        paramID = slot+"_VCO_"+"PW";
-        
-        params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" VCO Pulse Width", juce::NormalisableRange<float> { 0.0f, 100.0f, 0.01f }, 0.0f, "%"));
+        paramID = slot+"_VCO_Freq";
+        params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" VCO Frequency", juce::NormalisableRange<float> {0.01f, 5915.0f, 0.0f, 0.25f}, 0.0f));
+
+        paramID = slot+"_VCO_PW";
+        params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" VCO Pulse Width", juce::NormalisableRange<float> { 0.0f, 100.0f, 0.01f }, 0.0f));
         
         
-        paramID = slot+"_VCO_"+"WF";
+        paramID = slot+"_VCO_Freq_Mod";
+        params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" VCO Frequency Modulation", juce::NormalisableRange<float> { -100.0f, 100.0f, 0.01f }, 0.0f));
         
+        
+        
+        paramID = slot+"_VCO_WF";
         params.push_back(std::make_unique<juce::AudioParameterChoice> (juce::ParameterID(paramID, 1), slot+" VCO Waveform", juce::StringArray {"Sine","Saw","Square","Noise"}, 0));
+                
         
-        
-        paramID = slot+"_VCO_"+"Inputs";
-        
-        params.push_back(std::make_unique<juce::AudioParameterChoice> (juce::ParameterID(paramID, 1), slot+" VCO Inputs", juce::StringArray {"inc MIDI", "Drone"}, 0));
-        
-        
-        paramID = slot+"_VCO_"+"VM";
-        
+        paramID = slot+"_VCO_VM";
         params.push_back(std::make_unique<juce::AudioParameterChoice> (juce::ParameterID(paramID, 1), slot+" VCO Voice Mode", juce::StringArray {"monophonic", "polyphonic"}, 0));
         
         
+
+        paramID = slot+"_LFO_Freq";
+        params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" LFO Frequency", juce::NormalisableRange<float> {0.01f, 1024.0f, 0.0f, 0.25f}, 0.0f, "Hz"));
         
         
-        
-        
-        //LFO:
-        paramID = slot+"_LFO_"+"Freq";
-        
-        params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" LFO Frequency", juce::NormalisableRange<float> { 0.0f, 1000.0f, 0.01f }, 0.0f, "Hz"));
-        
-        
-        paramID = slot+"_LFO_"+"PW";
-        
+        paramID = slot+"_LFO_PW";
         params.push_back (std::make_unique<juce::AudioParameterFloat>(juce::ParameterID(paramID, 1), slot+" LFO Pulse Width", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.01f }, 0.0f, "%"));
         
-        
-        paramID = slot+"_LFO_"+"WF";
-        
+        paramID = slot+"_LFO_WF";
         params.push_back(std::make_unique<juce::AudioParameterChoice> (juce::ParameterID(paramID, 1), slot+" LFO Waveform", juce::StringArray {"Sine","Saw","Square","Noise"}, 0));
+        
+        
+        
+        paramID = slot+"_LFO_isEnabled";
+        params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID(paramID, 1), slot+" LFO Enabled", false));
 
+        
+        //loop for outputs
+        //for each slot options
+        
+        
+        paramID = "Matrix_Output"+juce::String(i);
+        juce::String paramName = "Matrix Output "+juce::String(i);
+
+        juce::StringArray OutputOptions = {};
+        OutputOptions.add(" ");
+        OutputOptions.add("Main Output");
+        
+        for (int slots=1; slots<5; slots++){
+            
+            
+            
+            
+            
+            
+            juce::String slot = "Slot"+juce::String(slots);
+            OutputOptions.addArray(juce::StringArray {
+                slot+"_VCO_Freq",
+                slot+"_VCO_PW",
+                slot+"_LFO_Freq",
+                slot+"_LFO_PW"
+            });
+        }
+        
+
+        params.push_back(std::make_unique<juce::AudioParameterChoice> (juce::ParameterID(paramID, 1), paramName, OutputOptions, 0));
+
+    
+
+
+        
+
+        
+        
         
         //Slot1_VCO_Freq
     
         
     }
-    
+    for(int x=1; x<5; x++){
+        for(int y=1; y<5; y++){
+            createGridParam(x, y, params);
+        }
+    }
     
     
     return { params.begin(), params.end() };
