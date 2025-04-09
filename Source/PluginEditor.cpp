@@ -82,13 +82,6 @@ PluginEditor::PluginEditor (WebMatrixSynthAudioProcessor& p)
         box->addItem("VCO", 2);
         box->addItem("LFO", 3);
 
-        box->addSectionHeading("Outputs");
-
-        box->addItem("1", 5);
-        box->addItem("2", 6);
-        box->addItem("3", 7);
-        box->addItem("4", 8);
-
         box->setSelectedId(1, juce::dontSendNotification);
      
         
