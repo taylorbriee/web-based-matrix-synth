@@ -89,10 +89,12 @@ void OSCComponent::resized()
     auto windowBottomHalf = window;
     
     
-    auto bottomSeg1 = windowBottomHalf.removeFromTop(windowBottomHalf.getHeight() / 3);
+    auto bottomSeg1 = windowBottomHalf.removeFromTop(windowBottomHalf.getHeight() / 4);
+    auto bottomSeg2 = windowBottomHalf.removeFromTop(windowBottomHalf.getHeight() / 3);
     auto bottomSeg3 = windowBottomHalf.removeFromTop(windowBottomHalf.getHeight() / 2);
 
     auto bottomSeg4 = windowBottomHalf;
+    
     
     addAndMakeVisible(waveTypeBox);
     waveTypeBox.addItem("Sine", 1);
@@ -102,6 +104,15 @@ void OSCComponent::resized()
     waveTypeBox.setSelectedId(1);
     
     waveTypeBox.setBounds(bottomSeg1);
+    
+    
+    addAndMakeVisible(perfMode);
+    perfMode.addItem("Drone", 1);
+    perfMode.addItem("MIDI In", 2);
+    perfMode.setSelectedId(1);
+    perfMode.setBounds(bottomSeg2);
+    
+    
     
     
     addAndMakeVisible(oscVoices);

@@ -29,7 +29,7 @@ public:
     void saveState() override;
     
     juce::Slider freqModDial, freqDial;
-    juce::ComboBox waveTypeBox, oscVoices;
+    juce::ComboBox waveTypeBox, oscVoices, perfMode;
     
 private:
 
